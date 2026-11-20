@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Discovery｜食物探索 — 認識食材，探索料理，建立自己的飲食文化</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts: Noto Sans TC & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', '"Inter"', 'sans-serif'],
+                    },
+                    colors: {
+                        cream: {
+                            50: '#FAF7F2',
+                            100: '#F3EDE3',
+                            200: '#E8E2D7',
+                        },
+                        sage: {
+                            50: '#F1F5F1',
+                            100: '#E1EAE2',
+                            200: '#C4D6C6',
+                            500: '#5F7A61',
+                            600: '#4A634C',
+                            700: '#3A4F3C',
+                        },
+                        terracotta: {
+                            50: '#FDF4EF',
+                            100: '#FAE4D7',
+                            400: '#E38D62',
+                            500: '#D97A4A',
+                            600: '#C26536',
+                        },
+                        cocoa: {
+                            700: '#6A6156',
+                            800: '#474038',
+                            900: '#2F2A24',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FAF7F2;
+            color: #2F2A24;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 20px -2px rgba(47, 42, 36, 0.05);
+        }
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px -4px rgba(47, 42, 36, 0.09);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-sage-200 selection:text-cocoa-900">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-cream-50/95 backdrop-blur-md border-b border-cream-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+            <!-- Brand Logo -->
+            <button onclick="navigateTo('home')" class="flex items-center gap-2.5 text-left group focus:outline-none cursor-pointer">
+                <div class="w-9 h-9 rounded-xl bg-sage-500 text-white flex items-center justify-center shadow-xs group-hover:bg-sage-600 transition-colors">
+                    <i data-lucide="sprout" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="font-bold text-base sm:text-lg tracking-tight text-cocoa-900 leading-none">
+                        Food Discovery <span class="text-sage-600 font-semibold">｜食物探索</span>
+                    </div>
+                    <p class="text-[11px] text-cocoa-700 hidden sm:block mt-0.5">認識食材，探索料理，建立自己的飲食文化。</p>
+                </div>
+            </button>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex items-center gap-1.5 bg-cream-100 p-1 rounded-2xl border border-cream-200">
+                <button data-nav="home" onclick="navigateTo('home')" class="nav-btn px-4 py-1.5 rounded-xl text-sm font-medium transition-all cursor-pointer">首頁</button>
+                <button data-nav="explore" onclick="navigateTo('explore')" class="nav-btn px-4 py-1.5 rounded-xl text-sm font-medium transition-all cursor-pointer">食物探索</button>
+                <button data-nav="ingredients" onclick="navigateTo('ingredients')" class="nav-btn px-4 py-1.5 rounded-xl text-sm font-medium transition-all cursor-pointer">食材圖鑑</button>
+                <button data-nav="diary" onclick="navigateTo('diary')" class="nav-btn px-4 py-1.5 rounded-xl text-sm font-medium transition-all cursor-pointer">我的飲食日記</button>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="開啟選單" class="md:hidden p-2 rounded-xl bg-cream-100 text-cocoa-900 hover:bg-cream-200 transition-colors">
+                <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-cream-50 border-b border-cream-200 px-4 py-3 space-y-1.5">
+            <button data-nav="home" onclick="navigateTo('home'); toggleMobileMenu()" class="nav-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium">首頁</button>
+            <button data-nav="explore" onclick="navigateTo('explore'); toggleMobileMenu()" class="nav-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium">食物探索</button>
+            <button data-nav="ingredients" onclick="navigateTo('ingredients'); toggleMobileMenu()" class="nav-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium">食材圖鑑</button>
+            <button data-nav="diary" onclick="navigateTo('diary'); toggleMobileMenu()" class="nav-btn w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium">我的飲食日記</button>
+        </div>
+    </header>
+
+    <!-- Toast Notification Banner -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Main Content Container -->
+    <main id="app-content" class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10">
+        <!-- Views are rendered dynamically here -->
+    </main>
+
+    <!-- Dish Detail Modal -->
+    <div id="dish-modal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-cocoa-900/50 backdrop-blur-xs p-3 sm:p-6 flex items-start sm:items-center justify-center">
+        <div id="dish-modal-content" class="bg-cream-50 w-full max-w-3xl rounded-3xl shadow-2xl border border-cream-200 overflow-hidden my-auto">
+            <!-- Dish details injected dynamically -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-cream-100 border-t border-cream-200 mt-16 py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-cocoa-700">
+            <div class="font-bold text-cocoa-900">Food Discovery｜食物探索</div>
+            <div class="text-xs text-cocoa-700">認識食材，探索料理，建立自己的飲食文化。</div>
+        </div>
+    </footer>
+
+    <script>
+        // =========================================================================
+        // 2. DISH IMAGE MAPPING (D01–D10 via GitHub Raw Assets + D11–D25 Consistent Placeholder)
+        // =========================================================================
+        const DISH_IMAGE_URLS = {
+            D01: "https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/images/dishes/D01.jpg",
+            D02: "https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/images/dishes/D02.jpg",
+            D03: "https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/images/dishes/D03.jpg",
+            D04: "https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/images/dishes/D04.jpg",
+            D05: "https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/images/dishes/D05.jpg",
+            D06: "https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/images/dishes/D06.jpg",
+            D07: "https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/images/dishes/D07.jpg",
+            D08: "https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/images/dishes/D08.jpg",
+            D09: "https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/images/dishes/D09.jpg",
+            D10: "https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/images/dishes/D10.jpg"
+        };
+
+        function renderConsistentPlaceholder(dish, size = 'card') {
+            const isCompact = size === 'thumb';
+            return `
+                <div class="w-full h-full bg-gradient-to-br from-cream-100 via-sage-50 to-terracotta-50 flex flex-col items-center justify-center relative select-none p-3 text-center">
+                    ${!isCompact ? `
+                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-cocoa-900/80 text-cream-50 text-[11px] font-semibold">
+                            ${escapeHTML(dish.cuisine)}
+                        </span>
+                    ` : ''}
+                    <div class="${isCompact ? 'w-8 h-8' : 'w-12 h-12'} rounded-2xl bg-white/90 border border-cream-200 text-sage-600 flex items-center justify-center shadow-2xs">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="${isCompact ? 'w-4 h-4' : 'w-6 h-6'}">
+                            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+                            <path d="M7 2v20"/>
+                            <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+                        </svg>
+                    </div>
+                    ${!isCompact ? `
+                        <span class="mt-2 text-xs font-semibold text-cocoa-700">${escapeHTML(dish.dish_name)}</span>
+                        <span class="text-[10px] text-cocoa-700/75 mt-0.5">${escapeHTML(dish.cuisine)} • ${escapeHTML(dish.cooking_method)}</span>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function renderDishIllustration(dish, size = 'card') {
+            const imageUrl = DISH_IMAGE_URLS[dish.dish_id];
+            const isCompact = size === 'thumb';
+
+            if (imageUrl) {
+                return `
+                    <div class="relative w-full h-full bg-cream-100 overflow-hidden">
+                        <img
+                            src="${escapeHTML(imageUrl)}"
+                            alt="${escapeHTML(dish.dish_name)}"
+                            loading="lazy"
+                            onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+                            class="w-full h-full object-cover"
+                        />
+                        <div class="hidden w-full h-full">
+                            ${renderConsistentPlaceholder(dish, size)}
+                        </div>
+                        ${!isCompact ? `
+                            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-cocoa-900/80 text-cream-50 text-[11px] font-semibold backdrop-blur-xs">
+                                ${escapeHTML(dish.cuisine)}
+                            </span>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            return renderConsistentPlaceholder(dish, size);
+        }
+
+        // =========================================================================
+        // 1. COMPLETE DATASETS (25 Dishes, 30 Ingredients, 4 Contexts, 6 Creators)
+        // =========================================================================
+        const DISHES = [
+            { dish_id: "D01", dish_name: "日式親子丼", cuisine: "日本", ingredients: ["雞肉", "蛋", "洋蔥", "白飯"], extra_ingredients: ["醬油", "味醂", "清酒", "高湯", "蔥花"], cooking_method: "煮", cooking_time: 20, difficulty: "簡單", context: "一個人簡單吃", description: "滑嫩蛋液包裹鮮嫩雞肉與清甜洋蔥，鋪在熱騰騰白飯上的日本經典家常丼飯。", food_culture: "親子丼誕生於明治時代的東京，名稱源自同時使用雞肉與雞蛋（親子）的食材組合，展現日本家庭料理講究高湯鮮味與快速溫暖的餐桌文化。", recommendation_reason: "備料單純且 20 分鐘即可完成，一碗就能同時攝取蛋白質與主食" },
+            { dish_id: "D02", dish_name: "番茄炒蛋", cuisine: "台灣", ingredients: ["番茄", "蛋"], extra_ingredients: ["蔥", "鹽", "糖", "食用油"], cooking_method: "快炒", cooking_time: 10, difficulty: "簡單", context: "家庭料理", description: "酸甜多汁的番茄搭配蓬鬆滑嫩的炒蛋，是台灣家庭餐桌上最親切的家常菜。", food_culture: "番茄炒蛋在 20 世紀初隨著西式食材普及融入華人家庭廚房，因色澤紅黃喜氣、酸甜下飯，成為跨越世代的經典家常記憶。", recommendation_reason: "只需兩樣核心食材、10 分鐘就能上桌，酸甜開胃又百搭" },
+            { dish_id: "D03", dish_name: "馬鈴薯燉肉", cuisine: "日本", ingredients: ["豬肉", "馬鈴薯", "洋蔥", "紅蘿蔔"], extra_ingredients: ["醬油", "味醂", "糖", "高湯"], cooking_method: "燉煮", cooking_time: 35, difficulty: "簡單", context: "家庭料理", description: "綿密入味的馬鈴薯與紅蘿蔔吸收鹹甜醬汁，搭配軟嫩豬肉片的溫暖燉菜。", food_culture: "馬鈴薯燉肉（肉じゃが）據傳起源於 19 世紀末日本海軍嘗試重現西式燉牛肉時改用醬油與糖調味，演變為象徵「媽媽的味道」的代表性家庭料理。", recommendation_reason: "一鍋燉煮就能完成主菜與配菜，隔餐加熱風味更濃郁" },
+            { dish_id: "D04", dish_name: "高麗菜炒豬肉", cuisine: "台灣", ingredients: ["高麗菜", "豬肉"], extra_ingredients: ["蒜頭", "醬油", "鹽", "白胡椒"], cooking_method: "快炒", cooking_time: 12, difficulty: "簡單", context: "一個人簡單吃", description: "大火快炒保留高麗菜的清甜爽脆，搭配香氣十足的豬肉片。", food_culture: "台灣高山與平地高麗菜品質優良，搭配蒜片與豬肉片快炒，體現台式熱炒講究火候與食材原味的日常飲食特色。", recommendation_reason: "快速爽脆、食材容易取得，搭配白飯就是滿足的一餐" },
+            { dish_id: "D05", dish_name: "香菇雞湯", cuisine: "台灣", ingredients: ["雞肉", "菇類"], extra_ingredients: ["薑片", "米酒", "鹽", "枸杞"], cooking_method: "煮湯", cooking_time: 40, difficulty: "簡單", context: "家庭料理", description: "乾香菇與雞肉慢火熬煮出清澈甘甜的湯頭，溫潤暖胃。", food_culture: "台灣飲食文化重視季節溫補，香菇雞湯常出現在家庭聚餐與日常晚餐中，藉由乾貨香菇釋放的天然鮮味凝聚家人情感。", recommendation_reason: "步驟簡單卻富含深層鮮味，適合全家人一起享用" },
+            { dish_id: "D06", dish_name: "麻婆豆腐", cuisine: "中國", ingredients: ["豆腐", "豬肉"], extra_ingredients: ["豆瓣醬", "花椒", "蒜末", "薑末", "蔥花", "太白粉"], cooking_method: "煮", cooking_time: 18, difficulty: "中等", context: "家庭料理", description: "滑嫩豆腐融合香辣濃郁的肉末醬汁，帶著花椒微麻香氣。", food_culture: "麻婆豆腐發源於清代成都，講究「麻、辣、燙、嫩、酥、香、鮮」七字特色，展現川菜善用發酵豆瓣與香料層次的烹飪智慧。", recommendation_reason: "平價豆腐與絞肉就能創造豐富香氣，非常適合搭配白飯分享" },
+            { dish_id: "D07", dish_name: "韓式豆腐鍋", cuisine: "韓國", ingredients: ["豆腐", "豬肉", "蛋", "洋蔥", "菇類"], extra_ingredients: ["韓式辣椒粉", "大蒜", "芝麻油", "蔥", "高湯"], cooking_method: "煮湯", cooking_time: 20, difficulty: "簡單", context: "一個人簡單吃", description: "熱辣鮮香的紅湯裡放入嫩豆腐與豬肉，最後打入一顆半熟蛋。", food_culture: "韓式嫩豆腐鍋（순두부찌개）以砂鍋保溫上桌，體現韓國飲食中「熱食共享、湯飯合一」的溫暖文化。", recommendation_reason: "一鍋滾燙上桌非常有滿足感，適合微涼天氣獨享" },
+            { dish_id: "D08", dish_name: "越式雞肉河粉", cuisine: "越南", ingredients: ["雞肉", "河粉", "豆芽", "洋蔥"], extra_ingredients: ["魚露", "九層塔", "檸檬", "薑", "青蔥"], cooking_method: "煮湯", cooking_time: 30, difficulty: "中等", context: "一個人簡單吃", description: "清香甘醇的雞骨湯底搭配滑順米河粉，佐以新鮮豆芽與香草。", food_culture: "越南河粉（Phở）融合法式熬湯技法與東南亞香料草本文化，習慣在餐桌旁自由添加新鮮香草、豆芽與檸檬汁調整風味。", recommendation_reason: "湯頭清爽不油膩，生鮮香草與豆芽增添豐富口感層次" },
+            { dish_id: "D09", dish_name: "泰式綠咖哩雞", cuisine: "泰國", ingredients: ["雞肉", "椰奶", "茄子", "甜椒"], extra_ingredients: ["綠咖哩醬", "魚露", "棕櫚糖", "檸檬葉", "九層塔"], cooking_method: "燉煮", cooking_time: 25, difficulty: "中等", context: "想犒賞自己", description: "濃郁滑順的椰奶平衡了青辣椒與香草的辛香，層次豐富迷人。", food_culture: "泰國中部料理擅長以新鮮香草搗製咖哩醬，再結合椰奶與魚露調和出「辣、甜、鹹、香」並存的熱帶風味。", recommendation_reason: "充滿異國香草氣息，能為日常餐桌帶來度假般的味覺驚喜" },
+            { dish_id: "D10", dish_name: "印尼炒飯", cuisine: "印尼", ingredients: ["白飯", "雞肉", "蝦", "蛋", "高麗菜"], extra_ingredients: ["印尼甜醬油", "紅蔥頭", "蒜頭", "辣椒", "小黃瓜"], cooking_method: "快炒", cooking_time: 18, difficulty: "簡單", context: "一個人簡單吃", description: "鹹甜焦香的印尼甜醬油包裹米飯，搭配鮮蝦、雞肉與太陽蛋。", food_culture: "印尼炒飯（Nasi Goreng）被譽為印尼國菜，起源於善用隔夜白飯搭配香料與甜醬油快炒的庶民智慧，常佐以煎蛋與爽脆黃瓜切片。", recommendation_reason: "焦香甜鹹滋味迷人，一盤就能同時享受海鮮、雞肉與煎蛋" },
+            { dish_id: "D11", dish_name: "馬來西亞叻沙米粉", cuisine: "馬來西亞", ingredients: ["米粉", "蝦", "豆腐", "豆芽", "椰奶"], extra_ingredients: ["叻沙醬", "魚露", "油豆腐", "水煮蛋", "檸檬"], cooking_method: "煮湯", cooking_time: 25, difficulty: "中等", context: "想犒賞自己", description: "椰奶與南洋香料交織出濃郁湯頭，米粉吸附滿滿鮮甜海味。", food_culture: "叻沙是娘惹飲食文化的代表之一，融合華人麵食傳統與馬來香料技法，各地更發展出椰奶咖哩與酸辣亞參等不同流派。", recommendation_reason: "濃郁香料湯頭極具特色，讓喜歡麵食的人體驗南洋風味" },
+            { dish_id: "D12", dish_name: "菲律賓醋燉雞", cuisine: "菲律賓", ingredients: ["雞肉", "馬鈴薯", "洋蔥"], extra_ingredients: ["白醋", "醬油", "大蒜", "黑胡椒粒", "月桂葉"], cooking_method: "燉煮", cooking_time: 35, difficulty: "簡單", context: "家庭料理", description: "以醋、醬油、大蒜與月桂葉慢燉雞肉，鹹香微酸、肉質軟嫩。", food_culture: "菲律賓阿多波（Adobo）原意為醃漬，當地在熱帶氣候中善用天然醋與大蒜燉煮肉類以延長保存並增添開胃酸香，是家家戶戶的國民料理。", recommendation_reason: "調味料簡單常見卻能燉出深厚韻味，越燉越下飯" },
+            { dish_id: "D13", dish_name: "新加坡海南雞飯風味飯", cuisine: "新加坡", ingredients: ["雞肉", "白飯", "小黃瓜"], extra_ingredients: ["薑", "蒜", "蔥", "雞高湯", "香蘭葉"], cooking_method: "水煮", cooking_time: 35, difficulty: "中等", context: "一個人簡單吃", description: "水煮嫩雞搭配以雞湯與薑蒜炊煮的香米飯，佐以清爽小黃瓜。", food_culture: "海南雞飯隨早期華人移民傳入南洋，在新加坡發展為代表性庶民美食，講究雞肉滑嫩度與雞油香飯的細膩平衡。", recommendation_reason: "風味溫和純粹，能細細品嚐雞肉原汁與米飯香氣" },
+            { dish_id: "D14", dish_name: "經典番茄肉醬義大利麵", cuisine: "義大利", ingredients: ["義大利麵", "牛肉", "番茄", "洋蔥", "紅蘿蔔"], extra_ingredients: ["大蒜", "橄欖油", "義式香料", "黑胡椒", "帕瑪森起司"], cooking_method: "燉煮", cooking_time: 35, difficulty: "中等", context: "家庭料理", description: "牛絞肉與番茄、根莖蔬菜慢火熬煮成濃郁肉醬，均勻裹住彈牙麵條。", food_culture: "波隆那肉醬（Ragù alla Bolognese）源自義大利北部艾米利亞-羅馬涅大區，強調用洋蔥、紅蘿蔔與番茄慢燉釋放自然甜味。", recommendation_reason: "大人小孩都喜愛的經典西式料理，肉醬也可提前準備" },
+            { dish_id: "D15", dish_name: "義式培根蛋奶麵", cuisine: "義大利", ingredients: ["義大利麵", "蛋", "起司"], extra_ingredients: ["培根", "黑胡椒", "橄欖油", "煮麵水"], cooking_method: "拌炒", cooking_time: 18, difficulty: "中等", context: "想犒賞自己", description: "利用麵條餘溫將蛋黃與起司乳化成絲滑醬汁，灑上現磨黑胡椒。", food_culture: "培根蛋奶麵（Carbonara）是羅馬經典麵食，正統做法不加鮮奶油，而是依靠蛋黃、硬質起司與煮麵水乳化出濃郁口感。", recommendation_reason: "18 分鐘就能完成餐廳級的濃郁享受，適合想犒賞自己的時刻" },
+            { dish_id: "D16", dish_name: "法式普羅旺斯燉菜", cuisine: "法國", ingredients: ["茄子", "櫛瓜", "甜椒", "番茄", "洋蔥"], extra_ingredients: ["大蒜", "橄欖油", "百里香", "羅勒", "海鹽"], cooking_method: "燉煮", cooking_time: 35, difficulty: "簡單", context: "家庭料理", description: "五彩繽紛的夏季地中海蔬菜以橄欖油與香草慢燉，清甜鮮美。", food_culture: "普羅旺斯燉菜（Ratatouille）源自法國南部尼斯農村，體現地中海飲食善用當季蔬果、橄欖油與新鮮香草的健康料理哲學。", recommendation_reason: "色彩豐富、全蔬食卻層次十足，無論熱食或冷食都很美味" },
+            { dish_id: "D17", dish_name: "西班牙馬鈴薯烘蛋", cuisine: "西班牙", ingredients: ["馬鈴薯", "蛋", "洋蔥"], extra_ingredients: ["橄欖油", "海鹽", "黑胡椒"], cooking_method: "煎烘", cooking_time: 25, difficulty: "中等", context: "與朋友聚餐", description: "切片馬鈴薯與洋蔥炒軟後融入蛋液厚煎，外層金黃、內部濕潤綿密。", food_culture: "西班牙馬鈴薯烘蛋（Tortilla Española）是西班牙小酒館（Tapas）文化的核心料理，常切成小塊與親友分享。", recommendation_reason: "切塊分食非常方便，樸實的馬鈴薯與蛋卻有令人驚豔的飽足感" },
+            { dish_id: "D18", dish_name: "美式起司雞肉焗烤斜管麵", cuisine: "美國", ingredients: ["義大利麵", "雞肉", "起司", "牛奶"], extra_ingredients: ["奶油", "麵粉", "大蒜粉", "黑胡椒", "巴西里"], cooking_method: "烘烤", cooking_time: 30, difficulty: "簡單", context: "想犒賞自己", description: "香濃奶醬與牽絲起司包裹雞肉與麵條，烤至表面金黃微焦。", food_culture: "美式起司通心粉（Mac and Cheese）是北美最經典的療癒系家庭料理（Comfort Food），加入雞肉後更成為豐盛的一餐。", recommendation_reason: "濃郁起司與奶香帶來滿滿幸福感，非常適合放鬆享受" },
+            { dish_id: "D19", dish_name: "墨西哥雞肉塔可", cuisine: "墨西哥", ingredients: ["玉米餅", "雞肉", "番茄", "洋蔥"], extra_ingredients: ["酪梨", "檸檬", "香菜", "孜然粉", "辣椒粉"], cooking_method: "乾煎", cooking_time: 20, difficulty: "簡單", context: "與朋友聚餐", description: "溫熱玉米餅夾入香料煎雞肉與清爽番茄莎莎，每一口都充滿活力。", food_culture: "塔可（Taco）是墨西哥飲食文化的靈魂，以玉米為核心主食，強調將主料與各式新鮮莎莎醬擺上桌由大家自由組裝。", recommendation_reason: "可讓大家依照喜好自由搭配餡料，聚餐氣氛輕鬆又有趣" },
+            { dish_id: "D20", dish_name: "英式牧羊人派", cuisine: "英國", ingredients: ["牛肉", "馬鈴薯", "紅蘿蔔", "洋蔥", "豌豆"], extra_ingredients: ["奶油", "牛奶", "番茄糊", "伍斯特醬", "百里香"], cooking_method: "烘烤", cooking_time: 45, difficulty: "中等", context: "家庭料理", description: "底層是濃郁蔬菜肉醬，上層覆蓋綿密奶香馬鈴薯泥烤至金黃。", food_culture: "牧羊人派（Shepherd's Pie / Cottage Pie）起源於英國鄉村家庭，將燉肉與馬鈴薯泥結合烘烤，是英國最具代表性的暖心家常菜。", recommendation_reason: "同時吃到綿密薯泥與濃郁肉醬，適合週末與家人共享" },
+            { dish_id: "D21", dish_name: "清蒸鮮魚", cuisine: "台灣", ingredients: ["魚肉"], extra_ingredients: ["薑絲", "蔥絲", "蒸魚醬油", "米酒", "香油"], cooking_method: "清蒸", cooking_time: 15, difficulty: "簡單", context: "家庭料理", description: "以清蒸保留魚肉細嫩鮮甜，淋上熱油激發蔥薑香氣。", food_culture: "沿海地區與台灣家庭講究海鮮「吃原味」，清蒸是最能考驗食材新鮮度、同時保持清爽無負擔的經典烹調技法。", recommendation_reason: "只需 15 分鐘即可完成，少油煙又能品嚐魚肉最純粹的鮮甜" },
+            { dish_id: "D22", dish_name: "泰式鮮蝦炒河粉", cuisine: "泰國", ingredients: ["河粉", "蝦", "蛋", "豆芽", "豆腐"], extra_ingredients: ["羅望子醬", "魚露", "棕櫚糖", "碎花生", "檸檬"], cooking_method: "快炒", cooking_time: 20, difficulty: "中等", context: "想犒賞自己", description: "Q彈河粉與鮮蝦在鍋中快炒，融合酸甜羅望子醬汁與花生香氣。", food_culture: "泰式炒河粉（Pad Thai）在 20 世紀中期成為泰國代表性國民料理，展現酸、甜、鹹、脆四種味覺與口感的精準平衡。", recommendation_reason: "酸甜開胃、配料豐富，在家也能體驗道地泰式街頭美食魅力" },
+            { dish_id: "D23", dish_name: "義式白酒蛤蜊義大利麵", cuisine: "義大利", ingredients: ["義大利麵", "蛤蜊"], extra_ingredients: ["大蒜", "白酒", "橄欖油", "乾辣椒", "巴西里"], cooking_method: "拌炒", cooking_time: 18, difficulty: "簡單", context: "想犒賞自己", description: "新鮮蛤蜊釋放天然海洋鹹鮮，與蒜香橄欖油醬汁完美融合。", food_culture: "義大利南部沿海料理擅長用極簡食材突顯海鮮鮮味，蛤蜊義大利麵（Spaghetti alle Vongole）正是地中海餐桌的經典。", recommendation_reason: "食材精簡卻鮮味十足，18 分鐘就能端出優雅的海鮮義大利麵" },
+            { dish_id: "D24", dish_name: "韓式涼拌菠菜", cuisine: "韓國", ingredients: ["菠菜"], extra_ingredients: ["芝麻油", "白芝麻", "蒜末", "鹽", "醬油"], cooking_method: "汆燙", cooking_time: 8, difficulty: "簡單", context: "家庭料理", description: "快速汆燙後的翠綠菠菜拌入香濃芝麻油與蒜末，清爽解膩。", food_culture: "韓國餐桌上的小菜（Banchan）文化重視蔬菜多樣性，涼拌菠菜（시금치나물）是幾乎每餐都會出現的經典常備菜。", recommendation_reason: "8 分鐘就能完成一道清爽蔬菜配菜，平衡主菜口味" },
+            { dish_id: "D25", dish_name: "日式蔬菜豆腐火鍋", cuisine: "日本", ingredients: ["豆腐", "高麗菜", "菇類", "菠菜", "紅蘿蔔"], extra_ingredients: ["昆布", "柴魚片", "醬油", "柚子醋", "蔥花"], cooking_method: "煮湯", cooking_time: 20, difficulty: "簡單", context: "與朋友聚餐", description: "清甜昆布高湯涮煮各式新鮮蔬菜與嫩豆腐，沾取微酸柚子醋享用。", food_culture: "日式鍋物（鍋料理）是日本秋冬聚會的核心文化，大家圍坐一鍋共享熱氣騰騰的食材，氣氛溫馨自在。", recommendation_reason: "備料輕鬆、無油煙，最適合與朋友圍爐聊天慢慢享用" }
+        ];
+
+        const INGREDIENTS = [
+            { ingredient_id: "I001", ingredient_name: "雞肉", category: "肉類", flavor: "鮮味、清淡", description: "常見的動物性蛋白質來源，適合多種料理文化", common_pairings: "蛋、菇類、馬鈴薯、洋蔥", cooking_uses: "煎、炒、煮、燉、烤" },
+            { ingredient_id: "I002", ingredient_name: "豬肉", category: "肉類", flavor: "鮮味、濃郁", description: "廣泛使用於亞洲與歐洲料理", common_pairings: "高麗菜、豆腐、馬鈴薯", cooking_uses: "炒、煎、燉、煮" },
+            { ingredient_id: "I003", ingredient_name: "蛋", category: "蛋豆類", flavor: "濃郁、滑嫩", description: "可作為主菜或搭配其他食材", common_pairings: "雞肉、番茄、馬鈴薯、豆腐", cooking_uses: "煎、炒、煮、蒸" },
+            { ingredient_id: "I004", ingredient_name: "豆腐", category: "蛋豆類", flavor: "清淡、柔軟", description: "由黃豆製成，容易吸收醬汁與湯底風味", common_pairings: "豬肉、番茄、蛋、菇類", cooking_uses: "煮、燉、煎、蒸" },
+            { ingredient_id: "I005", ingredient_name: "番茄", category: "蔬菜類", flavor: "酸甜、清爽", description: "常見於亞洲與地中海料理", common_pairings: "蛋、豆腐、洋蔥、雞肉", cooking_uses: "炒、燉、煮、生食" },
+            { ingredient_id: "I006", ingredient_name: "菇類", category: "菇類", flavor: "鮮味、香氣", description: "包含香菇、鴻喜菇等不同種類", common_pairings: "雞肉、豆腐、高麗菜", cooking_uses: "炒、煮、燉、烤" },
+            { ingredient_id: "I007", ingredient_name: "高麗菜", category: "蔬菜類", flavor: "清甜、爽脆", description: "適合炒菜、湯品及火鍋", common_pairings: "豬肉、蛋、菇類", cooking_uses: "炒、煮、燉" },
+            { ingredient_id: "I008", ingredient_name: "馬鈴薯", category: "根莖類", flavor: "綿密、清甜", description: "常見於燉菜、烘蛋與烤物", common_pairings: "雞肉、豬肉、蛋、洋蔥", cooking_uses: "煮、燉、烤、煎" },
+            { ingredient_id: "I009", ingredient_name: "牛肉", category: "肉類", flavor: "濃郁、鮮味", description: "常見於燉肉、牛排及肉醬料理", common_pairings: "馬鈴薯、洋蔥、番茄", cooking_uses: "煎、炒、燉、烤" },
+            { ingredient_id: "I010", ingredient_name: "魚肉", category: "海鮮類", flavor: "鮮味、清爽", description: "可用於蒸魚、魚湯與煎魚", common_pairings: "番茄、薑、蔥", cooking_uses: "蒸、煎、煮、烤" },
+            { ingredient_id: "I011", ingredient_name: "蝦", category: "海鮮類", flavor: "鮮甜、彈牙", description: "常見於炒飯、湯麵與海鮮料理", common_pairings: "蛋、番茄、米粉", cooking_uses: "炒、煮、烤" },
+            { ingredient_id: "I012", ingredient_name: "蛤蜊", category: "海鮮類", flavor: "鮮甜、鹹鮮", description: "常用於湯品與義大利麵", common_pairings: "蒜、番茄、義大利麵", cooking_uses: "煮、炒、蒸" },
+            { ingredient_id: "I013", ingredient_name: "洋蔥", category: "蔬菜類", flavor: "辛香、甜味", description: "加熱後會產生自然甜味，是多國料理基礎食材", common_pairings: "雞肉、牛肉、馬鈴薯", cooking_uses: "炒、燉、烤" },
+            { ingredient_id: "I014", ingredient_name: "紅蘿蔔", category: "根莖類", flavor: "清甜", description: "常見於湯品、燉菜與炒飯", common_pairings: "馬鈴薯、雞肉、洋蔥", cooking_uses: "煮、炒、燉、烤" },
+            { ingredient_id: "I015", ingredient_name: "茄子", category: "蔬菜類", flavor: "柔軟、微甜", description: "容易吸收醬汁，常見於地中海及亞洲料理", common_pairings: "番茄、甜椒、蒜", cooking_uses: "炒、燉、烤" },
+            { ingredient_id: "I016", ingredient_name: "櫛瓜", category: "蔬菜類", flavor: "清甜、清爽", description: "常見於歐洲蔬菜料理", common_pairings: "番茄、茄子、甜椒", cooking_uses: "炒、煎、烤、燉" },
+            { ingredient_id: "I017", ingredient_name: "甜椒", category: "蔬菜類", flavor: "清甜、爽脆", description: "適合炒菜、烤蔬菜與燉菜", common_pairings: "番茄、洋蔥、雞肉", cooking_uses: "炒、烤、燉" },
+            { ingredient_id: "I018", ingredient_name: "小黃瓜", category: "蔬菜類", flavor: "清爽、脆口", description: "常用於涼拌、沙拉與配菜", common_pairings: "雞肉、番茄、洋蔥", cooking_uses: "生食、涼拌" },
+            { ingredient_id: "I019", ingredient_name: "豆芽", category: "蔬菜類", flavor: "清爽、脆口", description: "常見於東南亞湯麵及炒麵", common_pairings: "河粉、豆腐、蛋", cooking_uses: "炒、汆燙、煮" },
+            { ingredient_id: "I020", ingredient_name: "菠菜", category: "葉菜類", flavor: "清甜、微澀", description: "常見於湯品、拌菜與義式料理", common_pairings: "蛋、菇類、起司", cooking_uses: "炒、煮、汆燙" },
+            { ingredient_id: "I021", ingredient_name: "白飯", category: "主食類", flavor: "清淡、米香", description: "亞洲料理常見主食", common_pairings: "雞肉、豬肉、蛋", cooking_uses: "蒸煮、炒" },
+            { ingredient_id: "I022", ingredient_name: "河粉", category: "主食類", flavor: "米香、滑順", description: "越南及東南亞料理常見的米製麵條", common_pairings: "雞肉、牛肉、豆芽", cooking_uses: "煮、炒" },
+            { ingredient_id: "I023", ingredient_name: "米粉", category: "主食類", flavor: "清淡、柔軟", description: "以米為主要原料製成的細麵條", common_pairings: "蝦、蛋、豆芽", cooking_uses: "炒、煮" },
+            { ingredient_id: "I024", ingredient_name: "義大利麵", category: "主食類", flavor: "麥香、彈牙", description: "義大利料理常見的麵食", common_pairings: "蛋、番茄、起司", cooking_uses: "煮、拌炒" },
+            { ingredient_id: "I025", ingredient_name: "玉米餅", category: "主食類", flavor: "玉米香", description: "墨西哥塔可常用的餅皮", common_pairings: "雞肉、番茄、洋蔥", cooking_uses: "乾煎、烘烤" },
+            { ingredient_id: "I026", ingredient_name: "派皮", category: "主食類", flavor: "酥脆、奶香", description: "常用於鹹派與甜派", common_pairings: "雞肉、馬鈴薯、奶油", cooking_uses: "烘烤" },
+            { ingredient_id: "I027", ingredient_name: "起司", category: "乳製品", flavor: "鹹香、濃郁", description: "常見於義大利麵、焗烤與沙拉", common_pairings: "蛋、義大利麵、番茄", cooking_uses: "拌煮、烘烤" },
+            { ingredient_id: "I028", ingredient_name: "牛奶", category: "乳製品", flavor: "奶香、柔和", description: "常用於白醬、濃湯及烘焙", common_pairings: "雞肉、馬鈴薯、麵粉", cooking_uses: "煮、烘焙" },
+            { ingredient_id: "I029", ingredient_name: "椰奶", category: "植物性食材", flavor: "濃郁、椰香", description: "常見於東南亞咖哩與湯品", common_pairings: "雞肉、米粉、豆腐", cooking_uses: "煮、燉" },
+            { ingredient_id: "I030", ingredient_name: "豌豆", category: "豆類", flavor: "清甜、柔軟", description: "常見於炒飯、燉菜及派類料理", common_pairings: "紅蘿蔔、馬鈴薯、雞肉", cooking_uses: "煮、炒、烘烤" }
+        ];
+
+        const CONTEXTS = [
+            {
+                context_id: "C01",
+                context_name: "一個人簡單吃",
+                description: "想快速解決一餐，不需要準備太多食材或花費太多時間",
+                recommendation_direction: "優先推薦簡單、快速、適合一人份的料理，例如丼飯、炒飯、湯麵",
+                icon: "coffee"
+            },
+            {
+                context_id: "C02",
+                context_name: "與朋友聚餐",
+                description: "與朋友一起享用食物，希望料理能帶來分享與互動的樂趣",
+                recommendation_direction: "優先推薦適合多人共享、分食或一起製作的料理，例如火鍋、塔可、烘蛋",
+                icon: "users"
+            },
+            {
+                context_id: "C03",
+                context_name: "家庭料理",
+                description: "想為自己與家人準備一頓家常、溫暖的餐點",
+                recommendation_direction: "優先推薦適合多人享用的家常菜、燉菜、湯品與蒸煮料理",
+                icon: "home"
+            },
+            {
+                context_id: "C04",
+                context_name: "想犒賞自己",
+                description: "想透過一頓喜歡的料理享受生活，嘗試不同風味或料理方式",
+                recommendation_direction: "優先推薦風味豐富、具有特色或帶來滿足感的料理，例如義大利麵、南洋料理、烘烤料理",
+                icon: "sparkles"
+            }
+        ];
+
+        const CREATOR_CONTENT = [
+            {
+                creator_id: "CR001",
+                creator_name: "Japanese Cooking 101",
+                platform: "Website",
+                account_url: "https://www.japanesecooking101.com/",
+                content_title: "日式親子丼",
+                content_url: "https://japanesecooking101.com/oyakodon-recipe/?utm_source=chatgpt.com",
+                related_dish: "D01",
+                content_type: "食譜與影片",
+                description: "日本家常料理教學，介紹親子丼的食材與製作方式"
+            },
+            {
+                creator_id: "CR002",
+                creator_name: "Pailin's Kitchen",
+                platform: "Website",
+                account_url: "https://hot-thai-kitchen.com/",
+                content_title: "泰式鮮蝦炒河粉",
+                content_url: "https://hot-thai-kitchen.com/best-pad-thai/",
+                related_dish: "D22",
+                content_type: "食譜與影片",
+                description: "介紹泰式炒河粉及其酸甜醬汁的料理技巧"
+            },
+            {
+                creator_id: "CR003",
+                creator_name: "Maangchi",
+                platform: "Website",
+                account_url: "https://www.maangchi.com/",
+                content_title: "韓式涼拌菠菜",
+                content_url: "https://www.maangchi.com/recipe/sigumchi-namul?utm_source=chatgpt.com",
+                related_dish: "D24",
+                content_type: "食譜與影片",
+                description: "介紹韓國家常小菜及菠菜的調味方式"
+            },
+            {
+                creator_id: "CR004",
+                creator_name: "Made With Lau",
+                platform: "Website",
+                account_url: "https://www.madewithlau.com/",
+                content_title: "中式家庭料理探索",
+                content_url: null,
+                related_dish: "D04、D21",
+                content_type: "創作者探索",
+                description: "介紹中式家庭料理與飲食文化傳承"
+            },
+            {
+                creator_id: "CR005",
+                creator_name: "RecipeTin Eats",
+                platform: "Website",
+                account_url: "https://www.recipetineats.com/",
+                content_title: "多國家庭料理探索",
+                content_url: null,
+                related_dish: "D13、D18、D20",
+                content_type: "創作者探索",
+                description: "提供多國家常料理與實用烹飪技巧"
+            },
+            {
+                creator_id: "CR006",
+                creator_name: "Pasta Grammar",
+                platform: "Website",
+                account_url: "https://www.pastagrammar.com/",
+                content_title: "義大利料理文化探索",
+                content_url: null,
+                related_dish: "D15、D23",
+                content_type: "創作者探索",
+                description: "介紹義大利傳統料理與地方飲食文化"
+            }
+        ];
+
+        // =========================================================================
+        // 3. STATE MANAGEMENT & LOCALSTORAGE DIARY PERSISTENCE
+        // =========================================================================
+        const DIARY_STORAGE_KEY = 'food_discovery_diary_records_v2';
+
+        let state = {
+            currentRoute: 'home', // 'home' | 'explore' | 'ingredients' | 'diary'
+            selectedIngredients: [],
+            noPreferenceMode: false,
+            selectedContext: '',
+            recommendationResults: null,
+            activeIngredientCategory: '全部',
+            ingredientSearchQuery: '',
+            selectedIngredientId: 'I001',
+            diaryDate: getTodayStr(),
+            editingEntryId: null,
+            prefillDiary: null, // { foodName, ingredients }
+            homeSuggestedOffset: 0
+        };
+
+        function getTodayStr() {
+            const now = new Date();
+            const offset = now.getTimezoneOffset() * 60000;
+            return new Date(now - offset).toISOString().split('T')[0];
+        }
+
+        function loadDiaryEntries() {
+            try {
+                const raw = localStorage.getItem(DIARY_STORAGE_KEY);
+                if (!raw) return [];
+                const parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                console.error('讀取飲食日記失敗:', e);
+                return [];
+            }
+        }
+
+        function saveDiaryEntries(entries) {
+            try {
+                localStorage.setItem(DIARY_STORAGE_KEY, JSON.stringify(entries));
+            } catch (e) {
+                showToast('儲存日記時發生錯誤，請確認瀏覽器儲存空間。', 'error');
+            }
+        }
+
+        // =========================================================================
+        // 4. UTILITIES & NOTIFICATIONS
+        // =========================================================================
+        function escapeHTML(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgClass = type === 'error' ? 'bg-red-700 text-white' : 'bg-cocoa-900 text-cream-50';
+            toast.className = `${bgClass} px-4 py-3 rounded-2xl shadow-lg text-sm font-medium flex items-center gap-2.5 pointer-events-auto transition-all duration-300 transform translate-y-2 opacity-0`;
+            toast.innerHTML = `
+                <i data-lucide="${type === 'error' ? 'alert-circle' : 'check-circle-2'}" class="w-4 h-4 shrink-0 ${type === 'error' ? 'text-white' : 'text-sage-400'}"></i>
+                <span>${escapeHTML(message)}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3200);
+        }
+
+        function navigateTo(route, options = {}) {
+            state.currentRoute = route;
+            if (options.ingredientName) {
+                const found = INGREDIENTS.find(i => i.ingredient_name === options.ingredientName);
+                if (found) {
+                    state.selectedIngredientId = found.ingredient_id;
+                    state.activeIngredientCategory = '全部';
+                    state.ingredientSearchQuery = '';
+                }
+            }
+            if (options.prefillDiary) {
+                state.prefillDiary = options.prefillDiary;
+                state.diaryDate = getTodayStr();
+                state.editingEntryId = null;
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            render();
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function updateActiveNav() {
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                const target = btn.getAttribute('data-nav');
+                if (target === state.currentRoute) {
+                    btn.classList.add('bg-sage-500', 'text-white', 'shadow-xs');
+                    btn.classList.remove('text-cocoa-700', 'hover:bg-cream-200/60');
+                } else {
+                    btn.classList.remove('bg-sage-500', 'text-white', 'shadow-xs');
+                    btn.classList.add('text-cocoa-700', 'hover:bg-cream-200/60');
+                }
+            });
+        }
+
+        // =========================================================================
+        // 5. RECOMMENDATION ENGINE (Section 3.3 Rules)
+        // =========================================================================
+        function runDishExploration() {
+            const selectedIngs = state.noPreferenceMode ? [] : state.selectedIngredients;
+            const selectedCtx = state.selectedContext;
+
+            if (!state.noPreferenceMode && selectedIngs.length === 0 && !selectedCtx) {
+                showToast('請至少選擇一項食材、勾選「沒有特定想法，讓我探索」，或選擇一個用餐情境。', 'error');
+                return;
+            }
+
+            const scored = DISHES.map(dish => {
+                const matchedIngs = selectedIngs.filter(ing => dish.ingredients.includes(ing));
+                const isFullMatch = selectedIngs.length > 0 && matchedIngs.length === selectedIngs.length;
+                const isContextMatch = selectedCtx ? dish.context === selectedCtx : false;
+
+                // Scoring Priority:
+                // 1. Complete match of all selected ingredients gets highest tier (+1000)
+                // 2. Partial matches ranked by higher count of matching ingredients (+120 per match)
+                // 3. Dining context acts as a ranking booster (+75), not a mandatory filter
+                let score = 0;
+                if (selectedIngs.length > 0) {
+                    if (isFullMatch) score += 1000;
+                    score += matchedIngs.length * 120;
+                }
+                if (isContextMatch) {
+                    score += 75;
+                }
+                if (selectedIngs.length === 0 && !selectedCtx) {
+                    score += 10;
+                }
+
+                // Build clear, warm Traditional Chinese recommendation reason
+                let dynamicReason = dish.recommendation_reason;
+                if (selectedIngs.length > 0) {
+                    if (isFullMatch && isContextMatch) {
+                        dynamicReason = `完整包含你選擇的「${matchedIngs.join('、')}」，且非常適合「${selectedCtx}」！${dish.recommendation_reason}。`;
+                    } else if (isFullMatch) {
+                        dynamicReason = `完整包含你選擇的所有食材（${matchedIngs.join('、')}），${dish.recommendation_reason}。`;
+                    } else if (matchedIngs.length > 0 && isContextMatch) {
+                        dynamicReason = `包含你選擇的「${matchedIngs.join('、')}」，並符合「${selectedCtx}」情境；${dish.recommendation_reason}。`;
+                    } else if (matchedIngs.length > 0) {
+                        dynamicReason = `包含你選擇的「${matchedIngs.join('、')}」，${dish.recommendation_reason}。`;
+                    }
+                } else if (isContextMatch) {
+                    dynamicReason = `符合「${selectedCtx}」的用餐氛圍：${dish.recommendation_reason}。`;
+                }
+
+                return {
+                    dish,
+                    score,
+                    matchedIngs,
+                    isFullMatch,
+                    isContextMatch,
+                    dynamicReason
+                };
+            });
+
+            // Filter relevant candidates based on rules
+            let candidates = [];
+            if (selectedIngs.length > 0) {
+                // Prioritize dishes matching at least one selected ingredient
+                candidates = scored.filter(item => item.matchedIngs.length > 0);
+            } else if (selectedCtx) {
+                // No ingredients selected: recommend based on selected dining context
+                candidates = scored.filter(item => item.isContextMatch);
+            } else {
+                // "沒有特定想法，讓我探索" with no context selected: explore across all dishes
+                candidates = [...scored];
+            }
+
+            // Sort by score descending; add gentle shuffle among equal scores for exploration variety
+            candidates.sort((a, b) => {
+                if (b.score !== a.score) return b.score - a.score;
+                return Math.random() - 0.5;
+            });
+
+            state.recommendationResults = candidates.slice(0, 3);
+            render();
+
+            setTimeout(() => {
+                const section = document.getElementById('recommendation-results-section');
+                if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 80);
+        }
+
+        // =========================================================================
+        // 6. 7-DAY FOOD DIARY ANALYTICS & PERSONALIZED EXPLORATION (Section 3.7)
+        // =========================================================================
+        function analyzeRecentSevenDays() {
+            const entries = loadDiaryEntries();
+            const now = new Date();
+            const sevenDaysAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
+
+            const recentEntries = entries.filter(entry => {
+                const parts = (entry.date || '').split('-');
+                if (parts.length !== 3) return false;
+                const d = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+                return d >= sevenDaysAgo;
+            });
+
+            const freqMap = {};
+            INGREDIENTS.forEach(ing => {
+                freqMap[ing.ingredient_name] = 0;
+            });
+
+            recentEntries.forEach(entry => {
+                (entry.ingredients || []).forEach(ingName => {
+                    freqMap[ingName] = (freqMap[ingName] || 0) + 1;
+                });
+            });
+
+            const allStats = Object.entries(freqMap).map(([name, count]) => ({
+                name,
+                count,
+                info: INGREDIENTS.find(i => i.ingredient_name === name)
+            }));
+
+            const recorded = allStats
+                .filter(s => s.count > 0)
+                .sort((a, b) => b.count - a.count);
+
+            // Frequent ingredients: appeared >= 2 times, or top 2 recorded if counts are all 1
+            let frequent = recorded.filter(s => s.count >= 2);
+            if (frequent.length === 0 && recorded.length > 0) {
+                frequent = recorded.slice(0, 2);
+            }
+
+            const frequentNameSet = new Set(frequent.map(f => f.name));
+
+            // Less frequently recorded ingredients (0 or 1 time, excluding top frequent ones)
+            const rareOrUnexplored = allStats
+                .filter(s => !frequentNameSet.has(s.name) && s.count <= 1)
+                .sort((a, b) => a.count - b.count);
+
+            const rareNameSet = new Set(rareOrUnexplored.map(r => r.name));
+
+            // Personalized recommendation: dishes containing BOTH frequent AND rare/less-recorded ingredients
+            let bridgeDishes = [];
+            if (recentEntries.length >= 2 && frequent.length > 0 && rareOrUnexplored.length > 0) {
+                bridgeDishes = DISHES.map(dish => {
+                    const matchedFreq = dish.ingredients.filter(i => frequentNameSet.has(i));
+                    const matchedRare = dish.ingredients.filter(i => rareNameSet.has(i));
+
+                    return {
+                        dish,
+                        matchedFreq,
+                        matchedRare,
+                        score: (matchedFreq.length > 0 && matchedRare.length > 0)
+                            ? (matchedFreq.length * 10 + matchedRare.length * 12)
+                            : 0
+                    };
+                })
+                .filter(item => item.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 3);
+            }
+
+            return {
+                recentEntries,
+                recorded,
+                frequent,
+                rareOrUnexplored,
+                bridgeDishes
+            };
+        }
+
+        // =========================================================================
+        // 7. VIEW RENDERERS
+        // =========================================================================
+
+        // --- 7.1 HOME PAGE ---
+        function renderHomeView() {
+            const entries = loadDiaryEntries();
+            const todayStr = getTodayStr();
+            const todayEntries = entries.filter(e => e.date === todayStr);
+
+            const daySeed = new Date().getDate() + state.homeSuggestedOffset;
+            const suggestedIng = INGREDIENTS[daySeed % INGREDIENTS.length];
+            const suggestedDish = DISHES[daySeed % DISHES.length];
+
+            return `
+                <div class="space-y-10">
+                    <!-- Hero Section -->
+                    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sage-100 via-cream-100 to-terracotta-50 border border-cream-200 p-6 sm:p-12 card-shadow">
+                        <div class="max-w-2xl space-y-5">
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 border border-sage-200 text-sage-700 text-xs font-semibold">
+                                <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+                                <span>日常飲食文化探索平台</span>
+                            </div>
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-cocoa-900 tracking-tight leading-tight">
+                                Food Discovery<span class="block sm:inline text-sage-600">｜食物探索</span>
+                            </h1>
+                            <p class="text-lg sm:text-xl font-semibold text-cocoa-900">
+                                認識食材，探索料理，建立自己的飲食文化。
+                            </p>
+                            <p class="text-sm sm:text-base text-cocoa-700 leading-relaxed">
+                                這不是計算卡路里或評斷飲食好壞的工具，而是一座陪伴你日常下廚與用餐的靈感廚房。從認識手邊的食材開始，探索來自不同國家的料理故事，記錄每日餐桌風景，溫和發掘新的飲食可能。
+                            </p>
+
+                            <!-- Primary Entry Points -->
+                            <div class="pt-2 flex flex-col sm:flex-row gap-3.5">
+                                <button onclick="navigateTo('explore')" class="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white font-semibold text-base shadow-sm transition-all cursor-pointer">
+                                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                                    <span>開始食物探索</span>
+                                </button>
+                                <button onclick="navigateTo('diary')" class="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white hover:bg-cream-50 text-cocoa-900 border border-cream-200 font-semibold text-base shadow-xs transition-all cursor-pointer">
+                                    <i data-lucide="book-open" class="w-5 h-5 text-terracotta-500"></i>
+                                    <span>我的飲食日記</span>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Dashboard Cards: Today's Diary Summary & Daily Exploration Suggestions -->
+                    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <!-- Today's Diary Summary -->
+                        <div class="lg:col-span-6 bg-white rounded-3xl border border-cream-200 p-6 card-shadow flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-9 h-9 rounded-xl bg-terracotta-50 text-terracotta-500 flex items-center justify-center">
+                                            <i data-lucide="calendar-heart" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <h2 class="font-bold text-lg text-cocoa-900">今日飲食日記摘要</h2>
+                                            <p class="text-xs text-cocoa-700">${todayStr}</p>
+                                        </div>
+                                    </div>
+                                    <button onclick="navigateTo('diary')" class="text-xs font-semibold text-sage-600 hover:text-sage-700 flex items-center gap-1 cursor-pointer">
+                                        <span>查看全部</span>
+                                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+
+                                ${todayEntries.length > 0 ? `
+                                    <div class="space-y-2.5 my-4">
+                                        ${todayEntries.map(entry => `
+                                            <div class="p-3.5 rounded-2xl bg-cream-50 border border-cream-200 flex items-start justify-between gap-3">
+                                                <div>
+                                                    <div class="flex items-center gap-2">
+                                                        <span class="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-sage-100 text-sage-700">${escapeHTML(entry.mealType)}</span>
+                                                        <span class="font-semibold text-sm text-cocoa-900">${escapeHTML(entry.foodName)}</span>
+                                                    </div>
+                                                    ${entry.ingredients && entry.ingredients.length > 0 ? `
+                                                        <div class="flex flex-wrap gap-1.5 mt-2">
+                                                            ${entry.ingredients.map(tag => `<span class="text-[11px] px-2 py-0.5 rounded-full bg-white border border-cream-200 text-cocoa-700">#${escapeHTML(tag)}</span>`).join('')}
+                                                        </div>
+                                                    ` : ''}
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                ` : `
+                                    <div class="my-6 p-6 rounded-2xl bg-cream-50 border border-dashed border-cream-200 text-center space-y-2">
+                                        <p class="text-sm font-medium text-cocoa-900">今天還沒有記錄餐點喔！</p>
+                                        <p class="text-xs text-cocoa-700">隨手記下今天吃了什麼，累積屬於你的日常飲食紀錄。</p>
+                                    </div>
+                                `}
+                            </div>
+
+                            <button onclick="navigateTo('diary')" class="w-full py-2.5 px-4 rounded-xl bg-terracotta-50 hover:bg-terracotta-100 text-terracotta-600 font-semibold text-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                <span>新增今日飲食紀錄</span>
+                            </button>
+                        </div>
+
+                        <!-- Suggested Ingredient & Dish -->
+                        <div class="lg:col-span-6 bg-white rounded-3xl border border-cream-200 p-6 card-shadow flex flex-col justify-between space-y-5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-9 h-9 rounded-xl bg-sage-50 text-sage-600 flex items-center justify-center">
+                                        <i data-lucide="compass" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <h2 class="font-bold text-lg text-cocoa-900">今日探索推薦</h2>
+                                        <p class="text-xs text-cocoa-700">認識一種食材，發現一道跨文化料理</p>
+                                    </div>
+                                </div>
+                                <button onclick="shuffleHomeSuggestion()" class="text-xs font-semibold text-cocoa-700 hover:text-cocoa-900 flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-cream-50 hover:bg-cream-100 border border-cream-200 transition-colors cursor-pointer">
+                                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                                    <span>換一組靈感</span>
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Suggested Ingredient -->
+                                <div onclick="navigateTo('ingredients', { ingredientName: '${escapeHTML(suggestedIng.ingredient_name)}' })"
+                                     class="cursor-pointer group p-4 rounded-2xl bg-sage-50/80 hover:bg-sage-50 border border-sage-200 transition-all flex flex-col justify-between">
+                                    <div>
+                                        <span class="inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-white text-sage-700 mb-2">認識食材｜${escapeHTML(suggestedIng.category)}</span>
+                                        <h3 class="font-bold text-lg text-cocoa-900 group-hover:text-sage-700 transition-colors">${escapeHTML(suggestedIng.ingredient_name)}</h3>
+                                        <p class="text-xs font-medium text-sage-700 mt-1">風味：${escapeHTML(suggestedIng.flavor)}</p>
+                                        <p class="text-xs text-cocoa-700 mt-2 line-clamp-3 leading-relaxed">${escapeHTML(suggestedIng.description)}</p>
+                                    </div>
+                                    <div class="mt-3 pt-2.5 border-t border-sage-200/60 text-xs font-semibold text-sage-700 flex items-center gap-1">
+                                        <span>查看食材圖鑑</span>
+                                        <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Suggested Dish -->
+                                <div onclick="openDishDetail('${suggestedDish.dish_id}')"
+                                     class="cursor-pointer group rounded-2xl bg-cream-50 hover:bg-cream-100/80 border border-cream-200 overflow-hidden transition-all flex flex-col justify-between">
+                                    <div>
+                                        <div class="aspect-16/9 w-full overflow-hidden">
+                                            ${renderDishIllustration(suggestedDish)}
+                                        </div>
+                                        <div class="p-3.5">
+                                            <h3 class="font-bold text-base text-cocoa-900 group-hover:text-terracotta-600 transition-colors">${escapeHTML(suggestedDish.dish_name)}</h3>
+                                            <p class="text-xs text-cocoa-700 mt-1 line-clamp-2">${escapeHTML(suggestedDish.description)}</p>
+                                        </div>
+                                    </div>
+                                    <div class="px-3.5 pb-3 text-xs font-semibold text-cocoa-900 flex items-center gap-1">
+                                        <span>查看料理做法</span>
+                                        <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Product Experience Flow -->
+                    <section class="bg-white rounded-3xl border border-cream-200 p-6 sm:p-8 card-shadow">
+                        <h2 class="font-bold text-lg text-cocoa-900 mb-5">從日常餐桌出發的探索旅程</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <button onclick="navigateTo('ingredients')" class="text-left p-4 rounded-2xl bg-cream-50 hover:bg-sage-50 border border-cream-200 transition-colors space-y-2 cursor-pointer">
+                                <div class="w-8 h-8 rounded-xl bg-sage-100 text-sage-700 flex items-center justify-center font-bold text-sm">1</div>
+                                <h3 class="font-bold text-cocoa-900">認識食材</h3>
+                                <p class="text-xs text-cocoa-700 leading-relaxed">瀏覽 30 種日常食材的風味特性、常見搭配與烹調用途。</p>
+                            </button>
+                            <button onclick="navigateTo('explore')" class="text-left p-4 rounded-2xl bg-cream-50 hover:bg-sage-50 border border-cream-200 transition-colors space-y-2 cursor-pointer">
+                                <div class="w-8 h-8 rounded-xl bg-sage-100 text-sage-700 flex items-center justify-center font-bold text-sm">2</div>
+                                <h3 class="font-bold text-cocoa-900">探索料理</h3>
+                                <p class="text-xs text-cocoa-700 leading-relaxed">依食材與用餐情境發掘 25 道跨國經典與家常料理。</p>
+                            </button>
+                            <button onclick="navigateTo('diary')" class="text-left p-4 rounded-2xl bg-cream-50 hover:bg-sage-50 border border-cream-200 transition-colors space-y-2 cursor-pointer">
+                                <div class="w-8 h-8 rounded-xl bg-sage-100 text-sage-700 flex items-center justify-center font-bold text-sm">3</div>
+                                <h3 class="font-bold text-cocoa-900">記錄每日飲食</h3>
+                                <p class="text-xs text-cocoa-700 leading-relaxed">輕鬆記錄三餐與點心，標記食材留下生活味覺筆記。</p>
+                            </button>
+                            <button onclick="navigateTo('diary')" class="text-left p-4 rounded-2xl bg-cream-50 hover:bg-sage-50 border border-cream-200 transition-colors space-y-2 cursor-pointer">
+                                <div class="w-8 h-8 rounded-xl bg-sage-100 text-sage-700 flex items-center justify-center font-bold text-sm">4</div>
+                                <h3 class="font-bold text-cocoa-900">發現新的可能</h3>
+                                <p class="text-xs text-cocoa-700 leading-relaxed">從近 7 日常吃食材出發，探索未曾嘗試的新食材組合。</p>
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            `;
+        }
+
+        function shuffleHomeSuggestion() {
+            state.homeSuggestedOffset = (state.homeSuggestedOffset + 1) % DISHES.length;
+            render();
+        }
+
+        // --- 7.2 FOOD EXPLORATION & RECOMMENDATION RESULTS ---
+        function renderExploreView() {
+            // Preserve category order from Ingredients dataset
+            const categoryOrder = ["肉類", "蛋豆類", "蔬菜類", "菇類", "根莖類", "海鮮類", "葉菜類", "主食類", "乳製品", "植物性食材", "豆類"];
+            const grouped = {};
+            categoryOrder.forEach(c => grouped[c] = []);
+            INGREDIENTS.forEach(ing => {
+                if (!grouped[ing.category]) grouped[ing.category] = [];
+                grouped[ing.category].push(ing);
+            });
+
+            return `
+                <div class="space-y-8">
+                    <!-- Header -->
+                    <div class="space-y-2">
+                        <h1 class="text-2xl sm:text-3xl font-bold text-cocoa-900">食物探索</h1>
+                        <p class="text-sm sm:text-base text-cocoa-700">挑選你感興趣或手邊現有的食材，搭配今天的用餐情境，發掘適合你的跨文化料理。</p>
+                    </div>
+
+                    <!-- Step 1: Select Ingredients -->
+                    <section class="bg-white rounded-3xl border border-cream-200 p-6 sm:p-8 card-shadow space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-cream-200 pb-4">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-sage-600 text-white font-bold text-sm flex items-center justify-center shrink-0">1</span>
+                                <div>
+                                    <h2 class="font-bold text-lg text-cocoa-900">選擇食材（可複選）</h2>
+                                    <p class="text-xs text-cocoa-700">點擊食材進行選取，再次點擊即可取消</p>
+                                </div>
+                            </div>
+
+                            <!-- "沒有特定想法，讓我探索" Toggle -->
+                            <button onclick="toggleNoPreference()"
+                                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl text-sm font-semibold border transition-all cursor-pointer ${
+                                    state.noPreferenceMode
+                                    ? 'bg-terracotta-500 text-white border-terracotta-500 shadow-xs'
+                                    : 'bg-cream-50 text-cocoa-900 border-cream-200 hover:bg-cream-100'
+                                }">
+                                <i data-lucide="${state.noPreferenceMode ? 'check-square' : 'square'}" class="w-4 h-4"></i>
+                                <span>沒有特定想法，讓我探索</span>
+                            </button>
+                        </div>
+
+                        ${state.selectedIngredients.length > 0 && !state.noPreferenceMode ? `
+                            <div class="flex flex-wrap items-center gap-2 p-3.5 rounded-2xl bg-sage-50 border border-sage-200">
+                                <span class="text-xs font-bold text-sage-700 mr-1">已選食材 (${state.selectedIngredients.length})：</span>
+                                ${state.selectedIngredients.map(name => `
+                                    <button onclick="toggleIngredientSelect('${escapeHTML(name)}')" class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-sage-600 text-white text-xs font-medium hover:bg-sage-700 transition-colors cursor-pointer">
+                                        <span>${escapeHTML(name)}</span>
+                                        <i data-lucide="x" class="w-3 h-3"></i>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+
+                        <div class="space-y-5 ${state.noPreferenceMode ? 'opacity-45 pointer-events-none select-none' : ''}">
+                            ${Object.entries(grouped).filter(([, items]) => items.length > 0).map(([category, items]) => `
+                                <div class="space-y-2">
+                                    <h3 class="text-xs font-bold text-cocoa-700 flex items-center gap-2">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-sage-500"></span>
+                                        <span>${escapeHTML(category)}</span>
+                                    </h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        ${items.map(ing => {
+                                            const active = state.selectedIngredients.includes(ing.ingredient_name);
+                                            return `
+                                                <button onclick="toggleIngredientSelect('${escapeHTML(ing.ingredient_name)}')"
+                                                    class="px-3.5 py-2 rounded-2xl text-sm font-medium border transition-all cursor-pointer flex items-center gap-1.5 ${
+                                                        active
+                                                        ? 'bg-sage-600 text-white border-sage-600 shadow-xs ring-2 ring-sage-200'
+                                                        : 'bg-cream-50 text-cocoa-900 border-cream-200 hover:border-sage-500 hover:bg-white'
+                                                    }">
+                                                    <span>${escapeHTML(ing.ingredient_name)}</span>
+                                                    ${active ? '<i data-lucide="check" class="w-3.5 h-3.5"></i>' : ''}
+                                                </button>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </section>
+
+                    <!-- Step 2: Select Dining Context -->
+                    <section class="bg-white rounded-3xl border border-cream-200 p-6 sm:p-8 card-shadow space-y-5">
+                        <div class="flex items-center gap-3 border-b border-cream-200 pb-4">
+                            <span class="w-8 h-8 rounded-full bg-sage-600 text-white font-bold text-sm flex items-center justify-center shrink-0">2</span>
+                            <div>
+                                <h2 class="font-bold text-lg text-cocoa-900">選擇用餐情境（單選）</h2>
+                                <p class="text-xs text-cocoa-700">用餐情境將作為排序加分依據，幫你找到最貼近此刻氛圍的料理</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                            ${CONTEXTS.map(ctx => {
+                                const active = state.selectedContext === ctx.context_name;
+                                return `
+                                    <button onclick="selectContextOption('${escapeHTML(ctx.context_name)}')"
+                                        class="text-left p-4 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-3 ${
+                                            active
+                                            ? 'bg-terracotta-50 border-terracotta-400 ring-2 ring-terracotta-100 shadow-xs'
+                                            : 'bg-cream-50 border-cream-200 hover:bg-white hover:border-cocoa-700/30'
+                                        }">
+                                        <div class="flex items-center justify-between">
+                                            <div class="w-9 h-9 rounded-xl ${active ? 'bg-terracotta-500 text-white' : 'bg-white text-cocoa-900 border border-cream-200'} flex items-center justify-center">
+                                                <i data-lucide="${ctx.icon}" class="w-4 h-4"></i>
+                                            </div>
+                                            ${active ? '<span class="text-xs font-bold text-terracotta-600">已選擇</span>' : ''}
+                                        </div>
+                                        <div>
+                                            <h3 class="font-bold text-base text-cocoa-900">${escapeHTML(ctx.context_name)}</h3>
+                                            <p class="text-xs text-cocoa-700 mt-1 leading-relaxed">${escapeHTML(ctx.description)}</p>
+                                        </div>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </section>
+
+                    <!-- Step 3: Start Exploration Button -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-1">
+                        <button onclick="runDishExploration()" class="w-full sm:w-auto px-10 py-4 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white font-bold text-base shadow-md transition-all cursor-pointer flex items-center justify-center gap-2.5">
+                            <i data-lucide="search" class="w-5 h-5"></i>
+                            <span>開始探索</span>
+                        </button>
+                        ${(state.selectedIngredients.length > 0 || state.selectedContext || state.noPreferenceMode || state.recommendationResults) ? `
+                            <button onclick="resetExploreState()" class="w-full sm:w-auto px-6 py-4 rounded-2xl bg-white hover:bg-cream-100 text-cocoa-900 border border-cream-200 font-semibold text-sm transition-colors cursor-pointer flex items-center justify-center gap-2">
+                                <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                                <span>重新選擇與探索</span>
+                            </button>
+                        ` : ''}
+                    </div>
+
+                    <!-- Recommendation Results -->
+                    ${state.recommendationResults !== null ? renderExplorationResultsSection() : ''}
+                </div>
+            `;
+        }
+
+        function renderExplorationResultsSection() {
+            const results = state.recommendationResults;
+
+            if (!results || results.length === 0) {
+                return `
+                    <section id="recommendation-results-section" class="bg-white rounded-3xl border border-cream-200 p-8 sm:p-12 text-center space-y-4 card-shadow">
+                        <div class="w-14 h-14 rounded-2xl bg-cream-100 text-cocoa-700 flex items-center justify-center mx-auto">
+                            <i data-lucide="utensils-crossed" class="w-7 h-7"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-cocoa-900">目前沒有找到符合條件的料理</h3>
+                        <p class="text-sm text-cocoa-700 max-w-md mx-auto">試著減少部分食材條件，或點擊「沒有特定想法，讓我探索」來發掘更多各國料理靈感！</p>
+                        <div class="pt-2">
+                            <button onclick="resetExploreState()" class="px-6 py-3 rounded-2xl bg-sage-600 hover:bg-sage-700 text-white font-semibold text-sm transition-colors cursor-pointer">
+                                重新選擇與探索
+                            </button>
+                        </div>
+                    </section>
+                `;
+            }
+
+            return `
+                <section id="recommendation-results-section" class="space-y-6 pt-6 border-t border-cream-200">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <span class="text-xs font-bold text-sage-600 uppercase tracking-wider">為你精選的探索結果</span>
+                            <h2 class="text-2xl font-bold text-cocoa-900 mt-0.5">推薦料理（共 ${results.length} 道）</h2>
+                        </div>
+                        <button onclick="resetExploreState()" class="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-white hover:bg-cream-100 text-cocoa-900 border border-cream-200 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer">
+                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                            <span>重新選擇與探索</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        ${results.map(item => {
+                            const { dish, matchedIngs, isFullMatch, dynamicReason } = item;
+                            const userSelectedInDish = dish.ingredients.filter(i => matchedIngs.includes(i));
+                            const otherMainIngs = dish.ingredients.filter(i => !matchedIngs.includes(i));
+
+                            return `
+                                <article onclick="openDishDetail('${dish.dish_id}', '${escapeHTML(dynamicReason)}')"
+                                    class="cursor-pointer bg-white rounded-3xl border border-cream-200 overflow-hidden card-shadow card-hover flex flex-col justify-between">
+                                    <div>
+                                        <div class="relative aspect-16/9 w-full overflow-hidden">
+                                            ${renderDishIllustration(dish)}
+                                            ${isFullMatch ? `
+                                                <span class="absolute top-3 right-3 px-2.5 py-1 rounded-xl bg-sage-600 text-white text-xs font-semibold shadow-xs">
+                                                    完全符合所選食材
+                                                </span>
+                                            ` : ''}
+                                        </div>
+
+                                        <div class="p-5 space-y-4">
+                                            <div>
+                                                <div class="flex items-center justify-between gap-2">
+                                                    <h3 class="text-xl font-bold text-cocoa-900">${escapeHTML(dish.dish_name)}</h3>
+                                                    <span class="text-xs font-medium px-2 py-0.5 rounded-lg bg-cream-100 text-cocoa-700 shrink-0">${escapeHTML(dish.context)}</span>
+                                                </div>
+                                                <div class="flex items-center gap-3 mt-2 text-xs text-cocoa-700 font-medium">
+                                                    <span class="inline-flex items-center gap-1">
+                                                        <i data-lucide="clock" class="w-3.5 h-3.5 text-sage-600"></i>
+                                                        ${dish.cooking_time} 分鐘
+                                                    </span>
+                                                    <span>•</span>
+                                                    <span class="inline-flex items-center gap-1">
+                                                        <i data-lucide="chef-hat" class="w-3.5 h-3.5 text-terracotta-500"></i>
+                                                        難度：${escapeHTML(dish.difficulty)}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Recommendation Reason -->
+                                            <div class="p-3 rounded-2xl bg-terracotta-50 border border-terracotta-100 text-xs text-cocoa-900 leading-relaxed">
+                                                <span class="font-bold text-terracotta-600">推薦理由：</span>${escapeHTML(dynamicReason)}
+                                            </div>
+
+                                            <!-- Clearly distinguish user-selected vs additional ingredients -->
+                                            <div class="space-y-2.5">
+                                                ${userSelectedInDish.length > 0 ? `
+                                                    <div>
+                                                        <div class="text-[11px] font-bold text-sage-700 mb-1">✓ 你選擇的食材：</div>
+                                                        <div class="flex flex-wrap gap-1.5">
+                                                            ${userSelectedInDish.map(ing => `
+                                                                <span class="px-2.5 py-0.5 rounded-lg bg-sage-100 text-sage-700 border border-sage-200 text-xs font-semibold">${escapeHTML(ing)}</span>
+                                                            `).join('')}
+                                                        </div>
+                                                    </div>
+                                                ` : `
+                                                    <div>
+                                                        <div class="text-[11px] font-bold text-cocoa-700 mb-1">主要食材：</div>
+                                                        <div class="flex flex-wrap gap-1.5">
+                                                            ${dish.ingredients.map(ing => `
+                                                                <span class="px-2.5 py-0.5 rounded-lg bg-sage-50 text-sage-700 border border-sage-200 text-xs font-medium">${escapeHTML(ing)}</span>
+                                                            `).join('')}
+                                                        </div>
+                                                    </div>
+                                                `}
+
+                                                <div>
+                                                    <div class="text-[11px] font-bold text-cocoa-700 mb-1">
+                                                        ${userSelectedInDish.length > 0 ? '還需要搭配的食材與調味：' : '其他調味與配料：'}
+                                                    </div>
+                                                    <div class="flex flex-wrap gap-1.5">
+                                                        ${(userSelectedInDish.length > 0 ? [...otherMainIngs, ...dish.extra_ingredients] : dish.extra_ingredients).map(ing => `
+                                                            <span class="px-2 py-0.5 rounded-lg bg-cream-100 text-cocoa-700 text-xs">${escapeHTML(ing)}</span>
+                                                        `).join('')}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="px-5 pb-5 pt-2">
+                                        <div class="w-full py-2.5 rounded-xl bg-cream-50 hover:bg-sage-50 text-center text-xs font-bold text-sage-700 border border-cream-200 transition-colors">
+                                            點擊查看料理詳情與飲食文化 →
+                                        </div>
+                                    </div>
+                                </article>
+                            `;
+                        }).join('')}
+                    </div>
+                </section>
+            `;
+        }
+
+        function toggleIngredientSelect(name) {
+            if (state.noPreferenceMode) state.noPreferenceMode = false;
+            const idx = state.selectedIngredients.indexOf(name);
+            if (idx > -1) {
+                state.selectedIngredients.splice(idx, 1);
+            } else {
+                state.selectedIngredients.push(name);
+            }
+            render();
+        }
+
+        function toggleNoPreference() {
+            state.noPreferenceMode = !state.noPreferenceMode;
+            if (state.noPreferenceMode) state.selectedIngredients = [];
+            render();
+        }
+
+        function selectContextOption(ctxName) {
+            state.selectedContext = (state.selectedContext === ctxName) ? '' : ctxName;
+            render();
+        }
+
+        function resetExploreState() {
+            state.selectedIngredients = [];
+            state.noPreferenceMode = false;
+            state.selectedContext = '';
+            state.recommendationResults = null;
+            render();
+        }
+
+        // --- 7.3 DISH DETAIL MODAL ---
+        function openDishDetail(dishId, customReason = '') {
+            const dish = DISHES.find(d => d.dish_id === dishId);
+            if (!dish) return;
+
+            // Match CreatorContent via related_dish split by "、"
+            const matchedCreators = CREATOR_CONTENT.filter(cr => {
+                const relatedIds = String(cr.related_dish || '').split('、').map(s => s.trim());
+                return relatedIds.includes(dish.dish_id);
+            });
+
+            const reasonDisplay = customReason || dish.recommendation_reason;
+            const knownIngSet = new Set(INGREDIENTS.map(i => i.ingredient_name));
+            const standardizedTags = dish.ingredients.filter(name => knownIngSet.has(name));
+
+            const modal = document.getElementById('dish-modal');
+            const content = document.getElementById('dish-modal-content');
+
+            content.innerHTML = `
+                <div class="relative">
+                    <!-- Top Illustration Banner -->
+                    <div class="relative aspect-16/9 sm:aspect-21/9 w-full overflow-hidden border-b border-cream-200">
+                        ${renderDishIllustration(dish, 'detail')}
+                        <button onclick="closeDishDetail()" aria-label="關閉料理詳情" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-cocoa-900/80 hover:bg-cocoa-900 text-white flex items-center justify-center backdrop-blur-xs transition-colors cursor-pointer">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                        <div class="absolute bottom-3 left-4 sm:left-6 flex flex-wrap gap-2">
+                            <span class="px-3 py-1 rounded-xl bg-white/95 text-cocoa-900 text-xs font-semibold shadow-xs border border-cream-200">適合情境：${escapeHTML(dish.context)}</span>
+                        </div>
+                    </div>
+
+                    <div class="p-6 sm:p-8 space-y-6">
+                        <!-- Title & Meta -->
+                        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b border-cream-200 pb-5">
+                            <div>
+                                <div class="text-xs font-bold text-sage-600 mb-1">${escapeHTML(dish.cuisine)}料理</div>
+                                <h2 class="text-2xl sm:text-3xl font-bold text-cocoa-900">${escapeHTML(dish.dish_name)}</h2>
+                                <p class="text-sm text-cocoa-700 mt-2 leading-relaxed">${escapeHTML(dish.description)}</p>
+                            </div>
+                            <div class="flex flex-wrap sm:flex-col gap-2.5 shrink-0 bg-cream-100 p-3.5 rounded-2xl border border-cream-200 text-xs font-semibold text-cocoa-900">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="flame" class="w-4 h-4 text-terracotta-500"></i>
+                                    <span>烹調方式：${escapeHTML(dish.cooking_method)}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="clock" class="w-4 h-4 text-sage-600"></i>
+                                    <span>烹調時間：${dish.cooking_time} 分鐘</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="chef-hat" class="w-4 h-4 text-cocoa-700"></i>
+                                    <span>料理難度：${escapeHTML(dish.difficulty)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recommendation Reason -->
+                        <div class="p-4 rounded-2xl bg-terracotta-50 border border-terracotta-100 flex items-start gap-3">
+                            <i data-lucide="sparkles" class="w-5 h-5 text-terracotta-500 shrink-0 mt-0.5"></i>
+                            <div class="text-sm text-cocoa-900 leading-relaxed">
+                                <span class="font-bold text-terracotta-600">探索推薦理由：</span>${escapeHTML(reasonDisplay)}
+                            </div>
+                        </div>
+
+                        <!-- Main & Extra Ingredients -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-2xl bg-sage-50/80 border border-sage-200">
+                                <h3 class="text-xs font-bold text-sage-700 mb-2.5">主要食材（點擊查看食材圖鑑）</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    ${dish.ingredients.map(ing => {
+                                        if (knownIngSet.has(ing)) {
+                                            return `
+                                                <button onclick="closeDishDetail(); navigateTo('ingredients', { ingredientName: '${escapeHTML(ing)}' })"
+                                                    class="px-3 py-1.5 rounded-xl bg-white hover:bg-sage-600 hover:text-white text-sage-700 border border-sage-200 text-xs font-semibold transition-colors cursor-pointer inline-flex items-center gap-1">
+                                                    <span>${escapeHTML(ing)}</span>
+                                                    <i data-lucide="book-open" class="w-3 h-3"></i>
+                                                </button>
+                                            `;
+                                        }
+                                        return `<span class="px-3 py-1.5 rounded-xl bg-white text-cocoa-900 border border-cream-200 text-xs font-medium">${escapeHTML(ing)}</span>`;
+                                    }).join('')}
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-cream-100/80 border border-cream-200">
+                                <h3 class="text-xs font-bold text-cocoa-700 mb-2.5">其他配料與調味料</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    ${dish.extra_ingredients.map(ing => `
+                                        <span class="px-3 py-1.5 rounded-xl bg-white text-cocoa-700 border border-cream-200 text-xs font-medium">${escapeHTML(ing)}</span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Food Culture Background -->
+                        <div class="space-y-2">
+                            <h3 class="font-bold text-base text-cocoa-900 flex items-center gap-2">
+                                <i data-lucide="globe" class="w-4 h-4 text-sage-600"></i>
+                                <span>飲食文化背景</span>
+                            </h3>
+                            <div class="p-4 rounded-2xl bg-sage-50/60 border border-sage-200/80 text-sm text-cocoa-900 leading-relaxed">
+                                ${escapeHTML(dish.food_culture)}
+                            </div>
+                        </div>
+
+                        <!-- CreatorContent Section -->
+                        ${matchedCreators.length > 0 ? `
+                            <div class="space-y-3">
+                                <h3 class="font-bold text-base text-cocoa-900 flex items-center gap-2">
+                                    <i data-lucide="external-link" class="w-4 h-4 text-terracotta-500"></i>
+                                    <span>料理創作者與延伸探索資源</span>
+                                </h3>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    ${matchedCreators.map(cr => {
+                                        const targetUrl = cr.content_url || cr.account_url;
+                                        return `
+                                            <a href="${escapeHTML(targetUrl)}" target="_blank" rel="noopener noreferrer"
+                                               class="p-4 rounded-2xl bg-white hover:bg-cream-100/80 border border-cream-200 transition-colors flex items-start justify-between gap-3 group">
+                                                <div class="space-y-1">
+                                                    <div class="flex items-center gap-1.5 text-[11px] font-semibold text-sage-700">
+                                                        <span>${escapeHTML(cr.creator_name)}</span>
+                                                        <span>•</span>
+                                                        <span>${escapeHTML(cr.content_type)}</span>
+                                                    </div>
+                                                    <div class="text-sm font-bold text-cocoa-900 group-hover:text-terracotta-600 transition-colors">
+                                                        ${escapeHTML(cr.content_title)}
+                                                    </div>
+                                                    <p class="text-xs text-cocoa-700 leading-relaxed">${escapeHTML(cr.description)}</p>
+                                                    <span class="inline-block text-[11px] font-semibold text-terracotta-600 pt-1">
+                                                        ${cr.content_url ? '前往食譜與教學內容 ↗' : '前往創作者網站探索 ↗'}
+                                                    </span>
+                                                </div>
+                                                <i data-lucide="arrow-up-right" class="w-4 h-4 text-cocoa-700 shrink-0 mt-0.5"></i>
+                                            </a>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Modal Footer Actions -->
+                        <div class="pt-4 border-t border-cream-200 flex flex-col sm:flex-row items-center justify-end gap-3">
+                            <button onclick="closeDishDetail()" class="w-full sm:w-auto px-5 py-3 rounded-2xl bg-cream-100 hover:bg-cream-200 text-cocoa-900 text-sm font-semibold transition-colors cursor-pointer">
+                                返回瀏覽
+                            </button>
+                            <button onclick='addDishToFoodDiary(${JSON.stringify(dish.dish_name)}, ${JSON.stringify(standardizedTags)})'
+                                class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-terracotta-500 hover:bg-terracotta-600 text-white text-sm font-bold shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2">
+                                <i data-lucide="book-plus" class="w-4 h-4"></i>
+                                <span>加入我的飲食日記</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeDishDetail() {
+            document.getElementById('dish-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function addDishToFoodDiary(dishName, tags) {
+            closeDishDetail();
+            navigateTo('diary', {
+                prefillDiary: {
+                    foodName: dishName,
+                    ingredients: tags
+                }
+            });
+            showToast(`已將「${dishName}」帶入飲食日記表單，確認餐別後即可儲存！`, 'success');
+        }
+
+        // --- 7.4 INGREDIENT KNOWLEDGE ---
+        function renderIngredientsView() {
+            const categories = ['全部', "肉類", "蛋豆類", "蔬菜類", "菇類", "根莖類", "海鮮類", "葉菜類", "主食類", "乳製品", "植物性食材", "豆類"];
+            const query = state.ingredientSearchQuery.trim().toLowerCase();
+
+            const filteredIngredients = INGREDIENTS.filter(ing => {
+                const matchCat = state.activeIngredientCategory === '全部' || ing.category === state.activeIngredientCategory;
+                const matchSearch = !query ||
+                    ing.ingredient_name.toLowerCase().includes(query) ||
+                    ing.flavor.toLowerCase().includes(query) ||
+                    ing.common_pairings.toLowerCase().includes(query);
+                return matchCat && matchSearch;
+            });
+
+            const activeIng = INGREDIENTS.find(i => i.ingredient_id === state.selectedIngredientId) || filteredIngredients[0] || INGREDIENTS[0];
+
+            // Related dishes containing this ingredient
+            const relatedDishes = activeIng
+                ? DISHES.filter(d => d.ingredients.includes(activeIng.ingredient_name))
+                : [];
+
+            return `
+                <div class="space-y-8">
+                    <!-- Header & Search -->
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                        <div class="space-y-2">
+                            <h1 class="text-2xl sm:text-3xl font-bold text-cocoa-900">食材圖鑑</h1>
+                            <p class="text-sm sm:text-base text-cocoa-700">認識 30 種常見食材的風味特性、常見搭配與跨文化料理應用。</p>
+                        </div>
+
+                        <div class="relative w-full sm:w-64">
+                            <i data-lucide="search" class="w-4 h-4 text-cocoa-700 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                            <input type="text" placeholder="搜尋食材名稱或風味..."
+                                value="${escapeHTML(state.ingredientSearchQuery)}"
+                                oninput="updateIngredientSearch(this.value)"
+                                class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border border-cream-200 text-sm text-cocoa-900 focus:outline-none focus:border-sage-500">
+                        </div>
+                    </div>
+
+                    <!-- Category Filter Pills -->
+                    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                        ${categories.map(cat => {
+                            const active = state.activeIngredientCategory === cat;
+                            return `
+                                <button onclick="setIngredientCategoryFilter('${escapeHTML(cat)}')"
+                                    class="px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold whitespace-nowrap border transition-all cursor-pointer ${
+                                        active
+                                        ? 'bg-sage-600 text-white border-sage-600 shadow-xs'
+                                        : 'bg-white text-cocoa-900 border-cream-200 hover:bg-cream-100'
+                                    }">
+                                    ${escapeHTML(cat)}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <!-- Master-Detail Layout -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        <!-- Left: Ingredient Cards -->
+                        <div class="lg:col-span-5">
+                            ${filteredIngredients.length > 0 ? `
+                                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-3 max-h-[640px] overflow-y-auto pr-1">
+                                    ${filteredIngredients.map(ing => {
+                                        const selected = activeIng && activeIng.ingredient_id === ing.ingredient_id;
+                                        return `
+                                            <button onclick="selectIngredientItem('${ing.ingredient_id}')"
+                                                class="text-left p-4 rounded-2xl border transition-all cursor-pointer ${
+                                                    selected
+                                                    ? 'bg-sage-600 text-white border-sage-600 shadow-sm'
+                                                    : 'bg-white text-cocoa-900 border-cream-200 hover:border-sage-500 card-shadow'
+                                                }">
+                                                <span class="text-[11px] font-medium ${selected ? 'text-sage-100' : 'text-sage-600'}">${escapeHTML(ing.category)}</span>
+                                                <div class="font-bold text-base mt-0.5">${escapeHTML(ing.ingredient_name)}</div>
+                                                <div class="text-[11px] mt-1 truncate ${selected ? 'text-sage-100' : 'text-cocoa-700'}">${escapeHTML(ing.flavor)}</div>
+                                            </button>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            ` : `
+                                <div class="bg-white rounded-3xl border border-cream-200 p-8 text-center space-y-2">
+                                    <p class="text-sm font-bold text-cocoa-900">找不到符合關鍵字的食材</p>
+                                    <button onclick="updateIngredientSearch(''); setIngredientCategoryFilter('全部')" class="text-xs font-semibold text-sage-600 hover:underline cursor-pointer">清除篩選條件</button>
+                                </div>
+                            `}
+                        </div>
+
+                        <!-- Right: Ingredient Detail View -->
+                        ${activeIng ? `
+                            <div class="lg:col-span-7 bg-white rounded-3xl border border-cream-200 p-6 sm:p-8 card-shadow space-y-6">
+                                <div class="border-b border-cream-200 pb-5">
+                                    <span class="inline-block px-3 py-1 rounded-full bg-sage-100 text-sage-700 text-xs font-bold mb-2">
+                                        ${escapeHTML(activeIng.category)}
+                                    </span>
+                                    <h2 class="text-2xl sm:text-3xl font-bold text-cocoa-900">${escapeHTML(activeIng.ingredient_name)}</h2>
+                                    <p class="text-sm sm:text-base text-cocoa-700 mt-3 leading-relaxed">${escapeHTML(activeIng.description)}</p>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="p-4 rounded-2xl bg-cream-50 border border-cream-200 space-y-1.5">
+                                        <div class="flex items-center gap-1.5 text-xs font-bold text-terracotta-600">
+                                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                            <span>風味特性</span>
+                                        </div>
+                                        <p class="text-sm font-medium text-cocoa-900">${escapeHTML(activeIng.flavor)}</p>
+                                    </div>
+
+                                    <div class="p-4 rounded-2xl bg-cream-50 border border-cream-200 space-y-1.5">
+                                        <div class="flex items-center gap-1.5 text-xs font-bold text-sage-700">
+                                            <i data-lucide="flame" class="w-4 h-4"></i>
+                                            <span>適合烹調方式</span>
+                                        </div>
+                                        <p class="text-sm font-medium text-cocoa-900">${escapeHTML(activeIng.cooking_uses)}</p>
+                                    </div>
+                                </div>
+
+                                <div class="p-4 rounded-2xl bg-sage-50/70 border border-sage-200 space-y-2">
+                                    <div class="flex items-center gap-1.5 text-xs font-bold text-sage-700">
+                                        <i data-lucide="layers" class="w-4 h-4"></i>
+                                        <span>常見食材搭配</span>
+                                    </div>
+                                    <div class="flex flex-wrap gap-2 pt-1">
+                                        ${activeIng.common_pairings.split('、').map(p => `
+                                            <span class="px-3 py-1 rounded-xl bg-white border border-sage-200 text-xs font-semibold text-cocoa-900">${escapeHTML(p.trim())}</span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+
+                                <!-- Related Dishes -->
+                                <div class="space-y-3 pt-2">
+                                    <h3 class="font-bold text-base text-cocoa-900 flex items-center gap-2">
+                                        <i data-lucide="utensils" class="w-4 h-4 text-terracotta-500"></i>
+                                        <span>包含「${escapeHTML(activeIng.ingredient_name)}」的相關料理（${relatedDishes.length} 道）</span>
+                                    </h3>
+
+                                    ${relatedDishes.length > 0 ? `
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                                            ${relatedDishes.map(dish => `
+                                                <div onclick="openDishDetail('${dish.dish_id}')"
+                                                     class="cursor-pointer group p-3 rounded-2xl bg-cream-50 hover:bg-cream-100 border border-cream-200 transition-all flex items-center gap-3">
+                                                    <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 border border-cream-200">
+                                                        ${renderDishIllustration(dish, 'thumb')}
+                                                    </div>
+                                                    <div class="min-w-0">
+                                                        <span class="text-[11px] font-semibold text-terracotta-600">${escapeHTML(dish.cuisine)}料理</span>
+                                                        <h4 class="font-bold text-sm text-cocoa-900 truncate group-hover:text-sage-700">${escapeHTML(dish.dish_name)}</h4>
+                                                        <p class="text-xs text-cocoa-700 mt-0.5">${dish.cooking_time} 分鐘 • ${escapeHTML(dish.difficulty)}</p>
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    ` : `
+                                        <p class="text-xs text-cocoa-700 p-4 rounded-2xl bg-cream-50">目前資料庫中暫無直接收錄此食材的料理。</p>
+                                    `}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function setIngredientCategoryFilter(cat) {
+            state.activeIngredientCategory = cat;
+            const firstMatch = INGREDIENTS.find(i => cat === '全部' || i.category === cat);
+            if (firstMatch) state.selectedIngredientId = firstMatch.ingredient_id;
+            render();
+        }
+
+        function updateIngredientSearch(val) {
+            state.ingredientSearchQuery = val;
+            render();
+        }
+
+        function selectIngredientItem(ingId) {
+            state.selectedIngredientId = ingId;
+            render();
+        }
+
+        // --- 7.5 MY FOOD DIARY & 7-DAY REVIEW ---
+        function renderDiaryView() {
+            const entries = loadDiaryEntries();
+            const selectedDateEntries = entries.filter(e => e.date === state.diaryDate);
+            const mealTypes = ['早餐', '午餐', '晚餐', '點心'];
+
+            let formValues = {
+                date: state.diaryDate,
+                mealType: '午餐',
+                foodName: '',
+                ingredients: [],
+                notes: ''
+            };
+
+            if (state.editingEntryId) {
+                const found = entries.find(e => e.id === state.editingEntryId);
+                if (found) formValues = { ...found };
+            } else if (state.prefillDiary) {
+                formValues.foodName = state.prefillDiary.foodName || '';
+                formValues.ingredients = [...(state.prefillDiary.ingredients || [])];
+            }
+
+            return `
+                <div class="space-y-12">
+                    <!-- Section A: Daily Food Diary -->
+                    <div class="space-y-8">
+                        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                            <div class="space-y-2">
+                                <h1 class="text-2xl sm:text-3xl font-bold text-cocoa-900">我的飲食日記</h1>
+                                <p class="text-sm sm:text-base text-cocoa-700">記錄每天吃下的食物與主要食材，無壓力累積屬於你的日常飲食文化。</p>
+                            </div>
+
+                            <!-- Date Selector -->
+                            <div class="flex items-center gap-2 bg-white p-2 rounded-2xl border border-cream-200 shadow-xs self-start sm:self-auto">
+                                <label for="diary-date-selector" class="text-xs font-bold text-cocoa-700 pl-2 flex items-center gap-1.5">
+                                    <i data-lucide="calendar" class="w-4 h-4 text-sage-600"></i>
+                                    <span>查看日期：</span>
+                                </label>
+                                <input type="date" id="diary-date-selector" value="${state.diaryDate}" onchange="changeDiaryDate(this.value)"
+                                    class="px-3 py-1.5 rounded-xl bg-cream-50 border border-cream-200 text-sm font-semibold text-cocoa-900 focus:outline-none focus:border-sage-500">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                            <!-- Left: Add / Edit Entry Form -->
+                            <div class="lg:col-span-5 bg-white rounded-3xl border border-cream-200 p-6 card-shadow space-y-5">
+                                <div class="flex items-center justify-between border-b border-cream-200 pb-3.5">
+                                    <h2 class="font-bold text-lg text-cocoa-900 flex items-center gap-2">
+                                        <i data-lucide="${state.editingEntryId ? 'edit-3' : 'plus-circle'}" class="w-5 h-5 text-terracotta-500"></i>
+                                        <span>${state.editingEntryId ? '編輯飲食紀錄' : '新增飲食紀錄'}</span>
+                                    </h2>
+                                    ${(state.editingEntryId || state.prefillDiary) ? `
+                                        <button type="button" onclick="cancelDiaryFormEdit()" class="text-xs font-semibold text-cocoa-700 hover:text-cocoa-900 cursor-pointer">取消</button>
+                                    ` : ''}
+                                </div>
+
+                                <form id="diary-entry-form" onsubmit="submitDiaryForm(event)" class="space-y-4">
+                                    <!-- Date -->
+                                    <div>
+                                        <label class="block text-xs font-bold text-cocoa-900 mb-1.5">日期</label>
+                                        <input type="date" name="date" required value="${formValues.date}"
+                                            class="w-full px-3.5 py-2.5 rounded-xl bg-cream-50 border border-cream-200 text-sm text-cocoa-900 focus:outline-none focus:border-sage-500">
+                                    </div>
+
+                                    <!-- Meal Type -->
+                                    <div>
+                                        <label class="block text-xs font-bold text-cocoa-900 mb-1.5">餐別</label>
+                                        <div class="grid grid-cols-4 gap-2">
+                                            ${mealTypes.map(type => `
+                                                <label class="cursor-pointer">
+                                                    <input type="radio" name="mealType" value="${type}" ${formValues.mealType === type ? 'checked' : ''} class="peer hidden">
+                                                    <div class="py-2 text-center rounded-xl text-xs font-semibold border border-cream-200 bg-cream-50 text-cocoa-700 peer-checked:bg-sage-600 peer-checked:text-white peer-checked:border-sage-600 transition-all">
+                                                        ${type}
+                                                    </div>
+                                                </label>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+
+                                    <!-- Food Name (Manual Input Allowed) -->
+                                    <div>
+                                        <label for="diaryFoodName" class="block text-xs font-bold text-cocoa-900 mb-1.5">食物名稱（可自由輸入任何餐點）</label>
+                                        <input type="text" id="diaryFoodName" name="foodName" required placeholder="例如：日式親子丼、便利商店飯糰、家常炒青菜..."
+                                            value="${escapeHTML(formValues.foodName)}"
+                                            class="w-full px-3.5 py-2.5 rounded-xl bg-cream-50 border border-cream-200 text-sm text-cocoa-900 focus:outline-none focus:border-sage-500">
+                                    </div>
+
+                                    <!-- Standardized Ingredient Tags -->
+                                    <div>
+                                        <label class="block text-xs font-bold text-cocoa-900 mb-1.5">包含的食材標籤（可複選）</label>
+                                        <div class="flex flex-wrap gap-1.5 max-h-44 overflow-y-auto p-3 rounded-2xl bg-cream-50 border border-cream-200">
+                                            ${INGREDIENTS.map(ing => {
+                                                const checked = formValues.ingredients.includes(ing.ingredient_name);
+                                                return `
+                                                    <label class="cursor-pointer select-none">
+                                                        <input type="checkbox" name="ingredients" value="${escapeHTML(ing.ingredient_name)}" ${checked ? 'checked' : ''} class="peer hidden">
+                                                        <span class="inline-block px-2.5 py-1 rounded-lg text-xs font-medium bg-white text-cocoa-700 border border-cream-200 peer-checked:bg-sage-600 peer-checked:text-white peer-checked:border-sage-600 transition-colors">
+                                                            ${escapeHTML(ing.ingredient_name)}
+                                                        </span>
+                                                    </label>
+                                                `;
+                                            }).join('')}
+                                        </div>
+                                    </div>
+
+                                    <!-- Optional Notes -->
+                                    <div>
+                                        <label for="diaryNotes" class="block text-xs font-bold text-cocoa-900 mb-1.5">備註（選填）</label>
+                                        <textarea id="diaryNotes" name="notes" rows="2" placeholder="記錄今天的口味感受、烹調心得或用餐心情..."
+                                            class="w-full px-3.5 py-2 rounded-xl bg-cream-50 border border-cream-200 text-sm text-cocoa-900 focus:outline-none focus:border-sage-500">${escapeHTML(formValues.notes)}</textarea>
+                                    </div>
+
+                                    <button type="submit" class="w-full py-3 rounded-2xl bg-terracotta-500 hover:bg-terracotta-600 text-white font-bold text-sm shadow-sm transition-colors cursor-pointer">
+                                        ${state.editingEntryId ? '儲存修改內容' : '儲存至我的飲食日記'}
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Right: Records for Selected Date -->
+                            <div class="lg:col-span-7 space-y-5">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="font-bold text-lg text-cocoa-900">
+                                        ${state.diaryDate === getTodayStr() ? '今日餐點紀錄' : `${state.diaryDate} 餐點紀錄`}
+                                        <span class="text-sm font-normal text-cocoa-700 ml-1">（共 ${selectedDateEntries.length} 筆）</span>
+                                    </h2>
+                                    ${state.diaryDate !== getTodayStr() ? `
+                                        <button onclick="changeDiaryDate('${getTodayStr()}')" class="text-xs font-semibold text-sage-600 hover:text-sage-700 cursor-pointer">回到今天</button>
+                                    ` : ''}
+                                </div>
+
+                                ${mealTypes.map(mealType => {
+                                    const mealEntries = selectedDateEntries.filter(e => e.mealType === mealType);
+                                    return `
+                                        <div class="bg-white rounded-3xl border border-cream-200 p-5 card-shadow space-y-3">
+                                            <div class="flex items-center justify-between">
+                                                <span class="px-3 py-1 rounded-xl bg-sage-100 text-sage-700 text-xs font-bold">${mealType}</span>
+                                                <span class="text-xs text-cocoa-700">${mealEntries.length} 筆紀錄</span>
+                                            </div>
+
+                                            ${mealEntries.length > 0 ? `
+                                                <div class="space-y-3 pt-1">
+                                                    ${mealEntries.map(item => `
+                                                        <div class="p-4 rounded-2xl bg-cream-50 border border-cream-200 flex items-start justify-between gap-3">
+                                                            <div class="space-y-2">
+                                                                <h3 class="font-bold text-base text-cocoa-900">${escapeHTML(item.foodName)}</h3>
+                                                                ${item.ingredients && item.ingredients.length > 0 ? `
+                                                                    <div class="flex flex-wrap gap-1.5">
+                                                                        ${item.ingredients.map(tag => `
+                                                                            <span class="px-2.5 py-0.5 rounded-lg bg-white border border-sage-200 text-sage-700 text-xs font-medium">#${escapeHTML(tag)}</span>
+                                                                        `).join('')}
+                                                                    </div>
+                                                                ` : ''}
+                                                                ${item.notes ? `<p class="text-xs text-cocoa-700 italic">「${escapeHTML(item.notes)}」</p>` : ''}
+                                                            </div>
+
+                                                            <div class="flex items-center gap-1.5 shrink-0">
+                                                                <button onclick="editDiaryEntry('${item.id}')" title="編輯紀錄" class="p-2 rounded-xl bg-white hover:bg-sage-50 text-cocoa-700 hover:text-sage-700 border border-cream-200 transition-colors cursor-pointer">
+                                                                    <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+                                                                </button>
+                                                                <button onclick="removeDiaryEntry('${item.id}')" title="刪除紀錄" class="p-2 rounded-xl bg-white hover:bg-red-50 text-cocoa-700 hover:text-red-600 border border-cream-200 transition-colors cursor-pointer">
+                                                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    `).join('')}
+                                                </div>
+                                            ` : `
+                                                <p class="text-xs text-cocoa-700/75 py-1.5">尚無${mealType}紀錄</p>
+                                            `}
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section B: 7-Day Food Diary Review & Personalized Exploration (Section 3.7) -->
+                    ${renderSevenDayReviewSection()}
+                </div>
+            `;
+        }
+
+        function renderSevenDayReviewSection() {
+            const { recentEntries, recorded, frequent, rareOrUnexplored, bridgeDishes } = analyzeRecentSevenDays();
+            const hasSufficientRecords = recentEntries.length >= 2 && recorded.length >= 1;
+
+            return `
+                <section id="seven-day-review-section" class="pt-10 border-t border-cream-200 space-y-6">
+                    <div class="space-y-1.5">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sage-100 text-sage-700 text-xs font-bold">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                            <span>近 7 日飲食回顧與個人化探索</span>
+                        </span>
+                        <h2 class="text-2xl font-bold text-cocoa-900">從熟悉食材出發，發現新的飲食可能性</h2>
+                        <p class="text-sm text-cocoa-700">回顧最近 7 天的餐點紀錄，觀察你最常接觸的食材，並試著搭配幾種平時較少出現在餐桌上的新食材。</p>
+                    </div>
+
+                    ${!hasSufficientRecords ? `
+                        <div class="bg-white rounded-3xl border border-cream-200 p-8 sm:p-10 text-center space-y-3 card-shadow">
+                            <div class="w-12 h-12 rounded-2xl bg-sage-50 text-sage-600 flex items-center justify-center mx-auto">
+                                <i data-lucide="notebook-pen" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-cocoa-900">再多記錄幾餐，就能開啟你的專屬食材探索推薦！</h3>
+                            <p class="text-sm text-cocoa-700 max-w-lg mx-auto leading-relaxed">
+                                目前最近 7 天共有 ${recentEntries.length} 筆餐點紀錄。只要在上方飲食日記中記錄 2 筆以上的餐點並勾選食材標籤，我們就會為你整理常吃食材並推薦結合新食材的料理。
+                            </p>
+                        </div>
+                    ` : `
+                        <!-- Ingredient Frequency Comparison -->
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                            <!-- Frequent Ingredients -->
+                            <div class="lg:col-span-6 bg-white rounded-3xl border border-cream-200 p-6 card-shadow space-y-4">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-9 h-9 rounded-xl bg-terracotta-50 text-terracotta-500 flex items-center justify-center">
+                                        <i data-lucide="heart" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-base text-cocoa-900">最近經常出現的食材</h3>
+                                        <p class="text-xs text-cocoa-700">近 7 天共記錄 ${recentEntries.length} 筆餐點</p>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-3 pt-1">
+                                    ${recorded.slice(0, 5).map(item => {
+                                        const maxCount = Math.max(...recorded.map(r => r.count), 1);
+                                        const widthPct = Math.round((item.count / maxCount) * 100);
+                                        return `
+                                            <div class="space-y-1">
+                                                <div class="flex justify-between text-xs font-semibold">
+                                                    <span class="text-cocoa-900">${escapeHTML(item.name)}</span>
+                                                    <span class="text-terracotta-600">出現 ${item.count} 次</span>
+                                                </div>
+                                                <div class="w-full h-2.5 rounded-full bg-cream-100 overflow-hidden">
+                                                    <div class="h-full rounded-full bg-terracotta-400" style="width: ${widthPct}%"></div>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Less Frequently Recorded Ingredients -->
+                            <div class="lg:col-span-6 bg-white rounded-3xl border border-cream-200 p-6 card-shadow space-y-4">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-9 h-9 rounded-xl bg-sage-50 text-sage-600 flex items-center justify-center">
+                                        <i data-lucide="sprout" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-base text-cocoa-900">近期較少出現、值得探索的食材</h3>
+                                        <p class="text-xs text-cocoa-700">點擊食材可查看風味介紹與相關食譜</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap gap-2 pt-1">
+                                    ${rareOrUnexplored.slice(0, 9).map(item => `
+                                        <button onclick="navigateTo('ingredients', { ingredientName: '${escapeHTML(item.name)}' })"
+                                            class="px-3 py-1.5 rounded-2xl bg-sage-50 hover:bg-sage-600 text-sage-700 hover:text-white border border-sage-200 text-xs font-semibold transition-colors cursor-pointer">
+                                            ${escapeHTML(item.name)}
+                                            <span class="opacity-75 text-[10px] ml-0.5">(${item.count === 0 ? '近期未記錄' : '1次'})</span>
+                                        </button>
+                                    `).join('')}
+                                </div>
+
+                                <p class="text-xs text-cocoa-700 bg-cream-50 p-3 rounded-2xl leading-relaxed">
+                                    每種食材都有獨特的風味個性，試著從你原本就喜歡的食材出發，慢慢認識新的味道組合。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Personalized Bridge Recommendations -->
+                        ${bridgeDishes.length > 0 ? `
+                            <div class="bg-gradient-to-br from-sage-50 via-white to-terracotta-50/50 rounded-3xl border border-sage-200 p-6 sm:p-8 card-shadow space-y-6">
+                                <div>
+                                    <h3 class="text-xl font-bold text-cocoa-900">為你推薦的新料理靈感</h3>
+                                    <p class="text-xs sm:text-sm text-cocoa-700 mt-1">結合你最近常吃的熟悉食材與較少接觸的新食材，輕鬆跨出探索第一步：</p>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    ${bridgeDishes.map(item => {
+                                        const { dish, matchedFreq, matchedRare } = item;
+                                        const friendlyNote = `你最近經常吃${matchedFreq.join('與')}，這次可以試著探索${matchedRare.join('與')}料理，從熟悉的食材開始發現新的飲食可能性。`;
+
+                                        return `
+                                            <article onclick="openDishDetail('${dish.dish_id}', '${escapeHTML(friendlyNote)}')"
+                                                class="cursor-pointer bg-white rounded-3xl border border-cream-200 overflow-hidden card-shadow card-hover flex flex-col justify-between">
+                                                <div>
+                                                    <div class="aspect-16/9 w-full overflow-hidden">
+                                                        ${renderDishIllustration(dish)}
+                                                    </div>
+                                                    <div class="p-5 space-y-3.5">
+                                                        <h4 class="text-lg font-bold text-cocoa-900">${escapeHTML(dish.dish_name)}</h4>
+
+                                                        <p class="p-3.5 rounded-2xl bg-sage-50 border border-sage-200 text-xs text-cocoa-900 leading-relaxed">
+                                                            「${escapeHTML(friendlyNote)}」
+                                                        </p>
+
+                                                        <div class="flex flex-wrap gap-1.5">
+                                                            ${matchedFreq.map(f => `<span class="px-2.5 py-0.5 rounded-lg bg-terracotta-50 text-terracotta-600 text-[11px] font-semibold">熟悉食材：${escapeHTML(f)}</span>`).join('')}
+                                                            ${matchedRare.map(r => `<span class="px-2.5 py-0.5 rounded-lg bg-sage-100 text-sage-700 text-[11px] font-semibold">新探索：${escapeHTML(r)}</span>`).join('')}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="px-5 pb-5">
+                                                    <div class="w-full py-2.5 rounded-xl bg-cream-50 text-center text-xs font-bold text-sage-700 border border-cream-200">
+                                                        查看料理詳情 →
+                                                    </div>
+                                                </div>
+                                            </article>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    `}
+                </section>
+            `;
+        }
+
+        function changeDiaryDate(newDate) {
+            if (!newDate) return;
+            state.diaryDate = newDate;
+            state.editingEntryId = null;
+            render();
+        }
+
+        function submitDiaryForm(event) {
+            event.preventDefault();
+            const form = event.target;
+            const date = form.date.value;
+            const mealType = form.mealType.value;
+            const foodName = form.foodName.value.trim();
+            const notes = form.notes.value.trim();
+            const ingredients = Array.from(form.querySelectorAll('input[name="ingredients"]:checked')).map(el => el.value);
+
+            if (!foodName) {
+                showToast('請輸入食物名稱', 'error');
+                return;
+            }
+
+            const entries = loadDiaryEntries();
+
+            if (state.editingEntryId) {
+                const idx = entries.findIndex(e => e.id === state.editingEntryId);
+                if (idx > -1) {
+                    entries[idx] = { ...entries[idx], date, mealType, foodName, ingredients, notes };
+                }
+                state.editingEntryId = null;
+                showToast('已更新這筆飲食紀錄！', 'success');
+            } else {
+                entries.unshift({
+                    id: 'diary_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                    date,
+                    mealType,
+                    foodName,
+                    ingredients,
+                    notes
+                });
+                showToast(`已將「${foodName}」加入飲食日記！`, 'success');
+            }
+
+            state.prefillDiary = null;
+            state.diaryDate = date;
+            saveDiaryEntries(entries);
+            render();
+        }
+
+        function editDiaryEntry(entryId) {
+            state.editingEntryId = entryId;
+            state.prefillDiary = null;
+            render();
+            document.getElementById('diary-entry-form')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function cancelDiaryFormEdit() {
+            state.editingEntryId = null;
+            state.prefillDiary = null;
+            render();
+        }
+
+        function removeDiaryEntry(entryId) {
+            const updated = loadDiaryEntries().filter(e => e.id !== entryId);
+            saveDiaryEntries(updated);
+            if (state.editingEntryId === entryId) state.editingEntryId = null;
+            showToast('已刪除該筆飲食紀錄', 'success');
+            render();
+        }
+
+        // =========================================================================
+        // 8. MASTER RENDER & EVENT LISTENERS
+        // =========================================================================
+        function render() {
+            updateActiveNav();
+            const container = document.getElementById('app-content');
+
+            switch (state.currentRoute) {
+                case 'home':
+                    container.innerHTML = renderHomeView();
+                    break;
+                case 'explore':
+                    container.innerHTML = renderExploreView();
+                    break;
+                case 'ingredients':
+                    container.innerHTML = renderIngredientsView();
+                    break;
+                case 'diary':
+                    container.innerHTML = renderDiaryView();
+                    break;
+                default:
+                    container.innerHTML = renderHomeView();
+            }
+
+            lucide.createIcons();
+        }
+
+        document.getElementById('dish-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeDishDetail();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeDishDetail();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            render();
+        });
+    </script>
+</body>
+</html>
