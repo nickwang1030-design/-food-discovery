@@ -1,0 +1,64 @@
+# Food Discovery｜食物探索 — 交接備忘錄（給 Claude）
+
+## 1. 專案定位與目前架構
+- **專案名稱**：Food Discovery｜食物探索
+- **核心理念**：「認識食材，探索料理，建立自己的飲食文化。」
+- **技術型態**：單檔 SPA（`index.html`），使用 Tailwind CSS（CDN v3）、Lucide Icons、Noto Sans TC / Noto Serif TC / Playfair Display / Inter 字體與原生 JavaScript 狀態管理。
+- **語系規範**：所有使用者可見介面文字必須維持 **繁體中文**。
+
+## 2. 目前已完成的功能與頁面
+1. **首頁（`home`）**：
+   - 主視覺以「今天，你想吃什麼？」為核心，搭配「Food Discovery｜食物探索」品牌識別與副標題。
+   - 雙主按鈕：「開始探索」（進入食材與情境篩選）、「隨機看看」（直接啟用無特定想法探索模式並產出推薦）。
+   - 四段式結構：Hero 主視覺 → 今日飲食靈感（支援換一組） → 探索不同料理文化 → 關於 Food Discovery。
+2. **食物探索（`explore`）**：
+   - 支援「依食材與情境探索」與「瀏覽全部料理 (25)」（含國家篩選）。
+   - 內建 25 道料理（`D01`～`D25`）、30 種食材（`I001`～`I030`）、4 種用餐情境（`C01`～`C04`）與評分推薦演算法，並附有已選取條件時的底部懸浮操作列。
+3. **飲食靈感（`stories`）**：
+   - 課程展示用虛構創作者檔案（`FRAME & FLAVOR`、`BITE BEATS`、`MOTION PANTRY`、`DAILY CUTS`）與虛構示範作品。
+   - 支援風格分類篩選、創作者/作品視角切換、站內創作者詳情頁與「查看創作者」、「探索作品」、「尋找相關料理」操作，並標示虛構展示聲明。
+4. **食材圖鑑（`ingredients`）**：
+   - 支援分類與關鍵字搜尋 30 種食材、查看風味與搭配資訊，並聯動顯示包含該食材的料理。
+5. **料理詳情彈窗（`#dish-modal`）**：
+   - 顯示料理資訊、文化背景、主要食材跳轉圖鑑、一鍵「複製食材清單」、一鍵「加入我的飲食日記」，以及「從創作者的視角探索料理」（區分相關料理作品與延伸飲食靈感）。
+6. **我的飲食日記（`diary`）**：
+   - 支援新增／編輯／刪除紀錄、日期與餐別、選填料理照片（前端等比例縮放壓縮後存入 `localStorage`，超容量時有降級處理）、飲食故事、預設與自訂標籤系統、即時關鍵字與標籤搜尋，以及「製作分享卡」預覽與「下載分享卡」PNG 匯出。
+   - 保留向後相容的 `localStorage` 讀取機制（優先讀取 `food_discovery_diary_records_v2`，並相容舊版 `v1` / `food_diary_entries`），另有「載入 7 日示範紀錄」與近 7 日飲食回顧／新料理靈感分析。
+
+## 2.5 視覺設計系統（2026-11 編輯風格改版）
+- **風格**：當代美食雜誌式版面（不對稱排版、照片拼貼、大型襯線標題、細框線取代陰影）。
+- **色票**（`tailwind.config`）：`cream`（#F7F3EC 主背景）、`navy`（#1B3440 文字與重點區塊）、`mustard`（#F5A900 主要按鈕，**搭配 navy 文字**）、`caramel`（#D98D3E）、`olive`（#8B963D 標籤）、`coral`（#C75D45 強調）。舊色名 `cocoa / sage / terracotta` 已全面改名。
+- **字體**：標題 `h1–h4` 與 `.font-display` 使用 Playfair Display＋Noto Serif TC；內文 Noto Sans TC。小標使用 `.eyebrow`（小型大寫、加寬字距），斜體襯線用 `.italic-serif`，芥末黃底線強調用 `.mark-underline`。
+- **無照片的料理**：`renderConsistentPlaceholder()` 依 `CUISINE_TONES` 顯示色塊＋大字；食材分類色調為 `INGREDIENT_CATEGORY_TONES`；虛構創作者色調為 `STORY_CREATOR_TONES`。
+- **首頁區塊**：主視覺（照片拼貼）→ 今日飲食靈感 → 探索料理 → 食材分類 → 精選創作者 → 我的飲食故事。新增輔助函式 `openIngredientCategory()`、`openCuisineBrowse()`（僅導覽用途，未新增功能）。
+- **分享卡**：預覽（`openShareCardModal()`）與 PNG 匯出（`renderShareCardToCanvas()`）為同一版型，修改時兩邊要同步；字體預載於 `ensureShareCardFontsLoaded()`。
+
+## 3. 圖片與外部資源現況
+- **圖檔位置**：GitHub 儲存庫根目錄 Raw 網址 `https://raw.githubusercontent.com/nickwang1030-design/-food-discovery/main/Dxx.jpg`（程式中為 `DISH_IMAGE_BASE`）。
+- **重要**：儲存庫的 `D01.jpg`～`D10.jpg` 是依「舊版料理清單」編號（見 `dish_image_mapping.csv`），與目前 `DISHES` 的 `dish_id` **不一致**。`DISH_IMAGE_URLS` 已改為依照片實際內容對應：
+
+  | 料理 dish_id | 料理名稱 | 使用圖檔 |
+  |---|---|---|
+  | D01 | 日式親子丼 | D01.jpg |
+  | D02 | 番茄炒蛋 | D04.jpg |
+  | D03 | 馬鈴薯燉肉 | D06.jpg |
+  | D05 | 香菇雞湯 | D02.jpg |
+  | D06 | 麻婆豆腐 | D05.jpg |
+  | D08 | 越式雞肉河粉 | D10.jpg（僅 300×225，建議換高解析版） |
+
+- **尚無照片**（使用 `renderConsistentPlaceholder()` 占位卡）：D04、D07、D09、D10、D11～D25。
+- **儲存庫中未使用的圖**：D03.jpg 韓式雞肉拌飯、D07.jpg 高麗菜豬肉鍋、D08.jpg 番茄豆腐湯、D09.jpg 泰式打拋豬（站內無對應料理）。
+- **新增照片時**：建議檔名直接使用站內 `dish_id`（或另建 `images/` 資料夾避免與舊檔名混淆），並同步更新 `DISH_IMAGE_URLS`。
+
+## 4. 交接給 Claude 時的注意事項
+- **不要從頭重寫或刪除既有資料**：25 道料理、30 種食材、4 種情境、推薦邏輯、飲食日記與 `localStorage` 相容性都需完整保留。
+- **維持單檔可執行性**：除非專案需求明確調整為多檔或打包架構，否則請延續目前單一 `index.html` 的結構進行修改。
+- **小心狀態與渲染副作用**：即時搜尋框透過 `handleLiveSearchInput()` 觸發 `render()`；`render()` 會依 `data-focus-key` 還原焦點與游標，並以 `data-live-search` + document 層級的 composition 監聽避免打斷注音輸入。新增即時輸入框時請沿用此模式。
+- **Tailwind 版本**：CDN 為 v3，請勿使用 v4 專屬 class（如 `aspect-16/10`、`shadow-xs`），改用 `aspect-[16/10]`、`shadow-sm`。
+- **路由**：頁面狀態同步到網址 `#home`／`#explore` 等，支援手機返回鍵與重新整理。
+
+## 5. 建議的下一步方向
+- 補齊缺照片料理（D04、D07、D09、D10、D11～D25）並替換 D10.jpg 低解析圖。
+- 將儲存庫中舊版 `food_discovery.html`（1,923 行）更新為目前版本。
+- 強化分享卡版型細節（更多排版選項或日期範圍篩選）；字體預載已完成。
+- 手機版已完成第一輪打磨（底部面板、返回鍵、分享到相簿、點擊範圍、安全邊距），需於實機 iOS／Android 驗證。
